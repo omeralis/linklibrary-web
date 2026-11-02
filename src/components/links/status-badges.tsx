@@ -88,3 +88,36 @@ export function VisibilityBadge({ visibility }: { visibility: Visibility }) {
     </Badge>
   );
 }
+
+/**
+ * Two independent facts, always shown side by side with their own label:
+ * processing (are the page details ready?) and security (has the destination been cleared?).
+ * "Ready" never implies "cleared".
+ */
+export function LinkStatusSummary({ processing, security, visibility }: { processing: ProcessingStatus; security: SecurityStatus; visibility?: Visibility }) {
+  const t = useTranslations('links.statusSummary');
+  return (
+    <dl className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+      <div className="flex items-center gap-2" data-testid="processing-state">
+        <dt className="text-muted-foreground">{t('processing')}</dt>
+        <dd>
+          <ProcessingBadge status={processing} hideWhenDone={false} />
+        </dd>
+      </div>
+      <div className="flex items-center gap-2" data-testid="security-state">
+        <dt className="text-muted-foreground">{t('security')}</dt>
+        <dd>
+          <SecurityBadge status={security} />
+        </dd>
+      </div>
+      {visibility && (
+        <div className="flex items-center gap-2" data-testid="visibility-state">
+          <dt className="text-muted-foreground">{t('visibility')}</dt>
+          <dd>
+            <VisibilityBadge visibility={visibility} />
+          </dd>
+        </div>
+      )}
+    </dl>
+  );
+}

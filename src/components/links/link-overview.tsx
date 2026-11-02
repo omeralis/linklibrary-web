@@ -16,12 +16,26 @@ import { useTagMutations } from '@/hooks/use-links';
 import { useErrorMessage } from '@/hooks/use-error-message';
 import { AiPanel } from './ai-panel';
 
-function Row({ label, children }: { label: string; children: React.ReactNode }) {
+/** Short values sit on the label's line; long ones (addresses) go below it so they never wrap mid-column. */
+function Row({ label, children, stacked = false }: { label: string; children: React.ReactNode; stacked?: boolean }) {
   return (
-    <div className="grid grid-cols-[8rem_1fr] gap-3 py-2 text-sm">
-      <dt className="text-muted-foreground">{label}</dt>
-      <dd className="min-w-0 break-words">{children}</dd>
+    <div className={stacked ? 'grid gap-1 py-2.5 text-sm' : 'flex items-baseline justify-between gap-4 py-2.5 text-sm'}>
+      <dt className="shrink-0 text-muted-foreground">{label}</dt>
+      <dd className={stacked ? 'min-w-0 break-all' : 'min-w-0 text-end break-words'}>{children}</dd>
     </div>
+  );
+}
+
+/** Bounded preview showing the whole image (object-contain); disappears entirely if the image can't load. */
+function Preview({ src, className }: { src: string | null; className?: string }) {
+  const [failed, setFailed] = React.useState(false);
+  if (failed) return null;
+  return (
+    <figure className={className}>
+      <div className="flex aspect-[1.91/1] max-h-64 w-full items-center justify-center overflow-hidden rounded-xl border bg-muted">
+        <RemoteImage src={src} className="h-full w-full object-contain" onError={() => setFailed(true)} />
+      </div>
+    </figure>
   );
 }
 
@@ -41,29 +55,34 @@ export function LinkOverview({ link }: { link: OwnedLink }) {
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_20rem]">
+    <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_19rem]">
       <div className="grid gap-6">
-        {link.image_url && (
-          <div className="aspect-[1.91/1] overflow-hidden rounded-xl border bg-muted">
-            <RemoteImage src={link.image_url} className="size-full" />
-          </div>
-        )}
-        {link.description ? (
-          <p className="leading-relaxed text-pretty">{link.description}</p>
-        ) : (
-          <p className="text-sm text-muted-foreground">{t('noDescription')}</p>
-        )}
+        {/* Preview: bounded size, whole image visible (object-contain), shown first on small screens only. */}
+        {safeExternalUrl(link.image_url) && <Preview src={link.image_url} className="lg:hidden" />}
+        <Card className="gap-3">
+          <CardHeader>
+            <CardTitle className="text-base">{t('about')}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {link.description ? (
+              <p className="leading-relaxed text-pretty"><bdi>{link.description}</bdi></p>
+            ) : (
+              <p className="text-sm text-muted-foreground">{t('noDescription')}</p>
+            )}
+          </CardContent>
+        </Card>
         <AiPanel link={link} />
         <Card>
           <CardHeader>
             <CardTitle className="text-base">{t('notes')}</CardTitle>
           </CardHeader>
           <CardContent>
-            {link.notes ? <p className="text-sm whitespace-pre-line">{link.notes}</p> : <p className="text-sm text-muted-foreground">{t('noNotes')}</p>}
+            {link.notes ? <p className="text-sm whitespace-pre-line"><bdi>{link.notes}</bdi></p> : <p className="text-sm text-muted-foreground">{t('noNotes')}</p>}
           </CardContent>
         </Card>
       </div>
       <div className="grid h-fit gap-6">
+        {safeExternalUrl(link.image_url) && <Preview src={link.image_url} className="hidden lg:block" />}
         <Card className="gap-3">
           <CardHeader>
             <CardTitle className="text-base">{t('tags')}</CardTitle>
@@ -76,7 +95,7 @@ export function LinkOverview({ link }: { link: OwnedLink }) {
                 {link.tags.map((tag) => (
                   <li key={tag.slug}>
                     <Badge variant={tag.source === 'AI' ? 'brand' : 'secondary'} className="gap-1 pe-1">
-                      #{tag.name}
+                      <bdi>#{tag.name}</bdi>
                       {tag.source === 'AI' && <span className="text-[10px] opacity-75">{t('aiTag')}</span>}
                       <button
                         type="button"
@@ -126,13 +145,13 @@ export function LinkOverview({ link }: { link: OwnedLink }) {
           </CardHeader>
           <CardContent>
             <dl className="divide-y">
-              <Row label={t('url')}>
+              <Row label={t('url')} stacked>
                 <span dir="ltr" className="font-mono text-xs">
                   {displayUrl(link.url)}
                 </span>
               </Row>
-              {canonical && canonical !== link.url && (
-                <Row label={t('canonical')}>
+              {canonical && displayUrl(canonical) !== displayUrl(link.url) && (
+                <Row label={t('canonical')} stacked>
                   <span dir="ltr" className="font-mono text-xs">
                     {displayUrl(canonical)}
                   </span>

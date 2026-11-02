@@ -107,7 +107,9 @@ function LinkContent({ link }: { link: AnyLink }) {
         <Alert variant="info" className="mb-6">
           <Users aria-hidden />
           <AlertTitle>{viewer.shared_by ? t('sharedBy', { name: viewer.shared_by }) : t('sharedWithYou')}</AlertTitle>
-          <AlertDescription>{t('readOnly')}</AlertDescription>
+          <AlertDescription>
+            {t('readOnly')} {viewer.permissions.can_reshare ? t('canReshare') : t('noReshare')}
+          </AlertDescription>
         </Alert>
       )}
 
@@ -119,7 +121,7 @@ function LinkContent({ link }: { link: AnyLink }) {
               {link.site_name || link.hostname}
             </span>
           </div>
-          <h1 className="text-3xl leading-tight font-semibold tracking-tight text-balance break-words">{link.title}</h1>
+          <h1 className="text-3xl leading-tight font-semibold tracking-tight text-balance break-words"><bdi>{link.title}</bdi></h1>
           <div className="mt-4 flex flex-wrap items-center gap-2">
             <OpenLinkButton link={link} variant="default" size="default" label={t('visit')} />
             <SecurityBadge status={link.security.status} />
@@ -131,13 +133,13 @@ function LinkContent({ link }: { link: AnyLink }) {
               <RemoteImage src={link.image_url} alt="" className="size-full" />
             </div>
           )}
-          {link.description && <p className="mt-6 text-lg leading-relaxed text-pretty">{link.description}</p>}
+          {link.description && <p className="mt-6 text-lg leading-relaxed text-pretty"><bdi>{link.description}</bdi></p>}
           {link.tags.length > 0 && (
             <ul className="mt-6 flex flex-wrap gap-2">
               {link.tags.map((tag) => (
                 <li key={tag.slug}>
                   <Link href={`/explore?tag=${encodeURIComponent(tag.slug)}`} className="rounded-full border bg-card px-3 py-1 text-sm hover:bg-accent">
-                    #{tag.name}
+                    <bdi>#{tag.name}</bdi>
                   </Link>
                 </li>
               ))}

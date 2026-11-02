@@ -15,12 +15,21 @@ export function invalidateLinkData(queryClient: QueryClient, id?: string) {
   if (id) queryClient.invalidateQueries({ queryKey: queryKeys.links.detail(id) });
 }
 
+function sameView(a: LinkListParams, b: LinkListParams) {
+  return (a.trashed ?? null) === (b.trashed ?? null) && Boolean(a.favorite) === Boolean(b.favorite);
+}
+
 /** My links. While any visible link is still processing, the page refreshes every few seconds. */
 export function useLinksList(params: LinkListParams) {
   return useQuery({
     queryKey: queryKeys.links.list(params),
     queryFn: ({ signal }) => linksApi.list(params, signal),
-    placeholderData: (prev) => prev,
+    // Keep the previous page on screen while paging/searching within the SAME view, but never across
+    // views: showing library items under "Trash" (or vice versa) would offer the wrong actions on them.
+    placeholderData: (prev, prevQuery) => {
+      const prevParams = prevQuery?.queryKey[2] as LinkListParams | undefined;
+      return prevParams && sameView(prevParams, params) ? prev : undefined;
+    },
     refetchInterval: (query) => {
       const data = query.state.data as Paginated<OwnedLink> | undefined;
       return data?.items.some((l) => isProcessing(l.processing_status)) ? PROCESSING_POLL_MS + 2000 : false;

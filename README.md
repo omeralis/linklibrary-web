@@ -12,7 +12,7 @@ with security-checked sharing. It talks to the Laravel 13 API in
 | Data | Native `fetch` client + TanStack Query 5 (cache, mutations, polling) |
 | Forms | React Hook Form + Zod (mirrors backend validation; server 422s mapped onto fields) |
 | Auth | Laravel Sanctum **SPA cookies** + XSRF (no tokens in the browser) |
-| Tests | Vitest + Testing Library (80 unit/component tests), Playwright + axe (22 E2E tests) |
+| Tests | Vitest + Testing Library (81 unit/component tests), Playwright + axe: 22 mock-contract E2E tests + 42 **real-backend** E2E tests |
 
 More detail: [`docs/FRONTEND_ARCHITECTURE.md`](docs/FRONTEND_ARCHITECTURE.md),
 [`docs/FRONTEND_API_INTEGRATION.md`](docs/FRONTEND_API_INTEGRATION.md),
@@ -93,25 +93,41 @@ Secrets are never prefixed with `NEXT_PUBLIC_`. `.env.local` is git-ignored.
 | `npm run typecheck` | `next typegen` + `tsc --noEmit` (includes the OpenAPI contract check) |
 | `npm run lint` | ESLint (Next core-web-vitals + TypeScript + React Compiler rules) |
 | `npm test` | Vitest unit + component tests |
-| `npm run test:e2e` | Playwright E2E (builds the app, starts it on :3100 against the contract mock API on :8787) |
+| `npm run test:e2e` | Mock-contract E2E (builds the app, starts it on :3100 against the in-memory contract double on :8787) |
+| `npm run test:e2e:real` | **Real-backend** E2E against the running Laravel API (see below) |
 | `npm run i18n:check` | Arabic/English key parity + every key used in code exists |
 | `npm run api:types` | Regenerate `src/lib/api/schema.d.ts` from `../LinkLibrary/docs/openapi.yaml` |
 | `npm run check` | i18n + typecheck + lint + unit tests |
 
 First E2E run on a new machine: `npx playwright install chromium`.
 
-### E2E against the real API
+### Two separate E2E suites
 
-`npm run test:e2e` uses `e2e/mock-api/server.mjs`, an in-memory **test double** of the documented API
-contract (the sandbox that built this project has no PHP 8.4/PostgreSQL). The journey suite relies on its
-`/__test/*` hooks to read verification and invitation e-mails. The i18n, accessibility and mobile suites
-can run against the real backend:
+| Suite | Config | Backend | What it proves |
+|---|---|---|---|
+| `e2e/mock/` (`npm run test:e2e`) | `playwright.config.ts` | `e2e/mock-api/server.mjs` (in-memory contract double) | UI behaviour against the documented contract. **Not** proof of real integration. |
+| `e2e/real/` (`npm run test:e2e:real`) | `playwright.real.config.ts` | The real Laravel API + PostgreSQL | Auth/CSRF/sessions, links, extraction, security statuses and backend enforcement, collections, sharing graph, search (ar/en), notifications, public pages, admin authorization, axe and responsive layouts with real data. |
+
+The real suite creates disposable users (`…@e2e.example.com`) and deletes them at the end. Run it only
+against an **isolated database** (never the development database `linklibrary`):
 
 ```powershell
-$env:E2E_API_URL="http://localhost:8000"; npx playwright test e2e/i18n.spec.ts e2e/a11y.spec.ts e2e/mobile.spec.ts
+# Backend (E:\Dev\LinkLibrary) — one-time: an isolated database for E2E
+psql -U postgres -c "CREATE DATABASE linklibrary_e2e"
+$env:DB_DATABASE="linklibrary_e2e"; php artisan migrate --force; php artisan db:seed --class=DemoSeeder
+# `artisan serve` drops custom env vars, so serve the isolated instance with PHP's built-in server:
+$env:DB_DATABASE="linklibrary_e2e"; $env:MAIL_MAILER="log"; $env:SECURITY_BLOCKLIST_HOSTS="malware-fixture.example.net"
+php -S localhost:8000 -t public vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php
+# second terminal (same env vars): php artisan queue:work --queue=security,extraction,ai,default
+
+# Frontend (E:\Dev\linklibrary-web)
+$env:E2E_BACKEND_DIR="..\LinkLibrary"; npm run test:e2e:real
 ```
 
-(backend `FRONTEND_URL`, `SANCTUM_STATEFUL_DOMAINS` and `CORS_ALLOWED_ORIGINS` must then include `localhost:3100`).
+Requirements: `APP_ENV=local` (fixtures use `linklibrary:dev-mark-clear`, which refuses elsewhere),
+`MAIL_MAILER=log` (e-mails are read from `storage/logs/laravel.log`), outbound HTTPS for the extraction
+test (`E2E_EXTRACT_URL`, default a PyPI page). Full details and the last results:
+`docs/REAL_BACKEND_INTEGRATION_REPORT.md`.
 
 ## 5. Project layout
 
@@ -128,7 +144,8 @@ src/
   messages/{ar,en}.json      all UI strings
   i18n/                      next-intl routing / request config / navigation
   proxy.ts                   locale negotiation (Next 16 "proxy", formerly middleware)
-e2e/                         Playwright specs + contract mock API
+e2e/mock/ · e2e/mock-api/   mock-contract E2E suite + in-memory API double
+e2e/real/                    real-backend E2E suite (Laravel API + PostgreSQL)
 tests/                       Vitest unit & component tests
 ```
 

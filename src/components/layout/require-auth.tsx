@@ -12,8 +12,24 @@ import { Skeleton } from '@/components/ui/skeleton';
  * Client-side route guard for the dashboard. GET /auth/me decides; the API remains authoritative
  * for every request (401 → session cleared → redirected here to /login?next=…).
  */
+const noopSubscribe = () => () => {};
+
+/**
+ * False while React hydrates server HTML, true afterwards (and immediately on client-side navigations).
+ * The session query may already have resolved by the time a deferred Suspense boundary hydrates, so the
+ * first render must match the prerendered skeleton to avoid a hydration mismatch.
+ */
+function useHydrated() {
+  return React.useSyncExternalStore(
+    noopSubscribe,
+    () => true,
+    () => false,
+  );
+}
+
 export function RequireAuth({ children }: { children: (user: User) => React.ReactNode }) {
   const { user, status, error, refetch } = useSession();
+  const hydrated = useHydrated();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -26,6 +42,7 @@ export function RequireAuth({ children }: { children: (user: User) => React.Reac
     }
   }, [status, pathname, searchParams, router]);
 
+  if (!hydrated) return <ShellSkeleton />;
   if (status === 'authenticated' && user) return <>{children(user)}</>;
   if (status === 'error') {
     return (

@@ -37,6 +37,28 @@ export function countDependents(node: Node): number {
   return node.children.reduce((sum, child) => sum + (child.grant.effective ? 1 : 0) + countDependents(child), 0);
 }
 
+function subtreeGrants(node: Node): Grant[] {
+  return [node.grant, ...node.children.flatMap(subtreeGrants)];
+}
+
+/**
+ * Who actually loses access when `node` is revoked — the same rule the API applies: every effective grant
+ * in the subtree is revoked, but a person who also holds an effective grant OUTSIDE that subtree keeps
+ * access (an independent path). `all` must be the full list the caller can see; for a resharing viewer
+ * (who only sees their own grants) the result is an upper bound, which the dialog states.
+ */
+export function revocationImpact(all: Grant[], node: Node): { targetLoses: boolean; dependents: number } {
+  const inSubtree = new Set(subtreeGrants(node).map((g) => g.id));
+  const keeps = new Set(all.filter((g) => g.effective && g.status === 'ACTIVE' && !inSubtree.has(g.id)).map((g) => g.grantee.username));
+  const target = node.grant.grantee.username;
+  const losing = new Set(
+    subtreeGrants(node)
+      .filter((g) => g.effective && g.grantee.username !== target && !keeps.has(g.grantee.username))
+      .map((g) => g.grantee.username),
+  );
+  return { targetLoses: !keeps.has(target), dependents: losing.size };
+}
+
 function findNode(nodes: Node[], id: string): Node | undefined {
   for (const n of nodes) {
     if (n.grant.id === id) return n;
@@ -64,7 +86,8 @@ export function AccessGraph({ linkId, isOwner }: { linkId: string; isOwner: bool
   const grants = showRevoked ? graph.data.grants : graph.data.grants.filter((g) => g.status === 'ACTIVE');
   const tree = buildGrantTree(grants);
   const target = targetId ? findNode(buildGrantTree(graph.data.grants), targetId) : undefined;
-  const dependents = target ? countDependents(target) : 0;
+  const impact = target ? revocationImpact(graph.data.grants, target) : { targetLoses: true, dependents: 0 };
+  const dependents = impact.dependents;
   const revokedCount = graph.data.grants.filter((g) => g.status !== 'ACTIVE').length;
 
   return (
@@ -92,7 +115,7 @@ export function AccessGraph({ linkId, isOwner }: { linkId: string; isOwner: bool
         title={t('revokeTitle', { name: target?.grant.grantee.name ?? '' })}
         description={
           <div className="grid gap-2">
-            <p>{t('revokeBody')}</p>
+            <p>{impact.targetLoses ? t('revokeBody') : t('revokeKeeps', { name: target?.grant.grantee.name ?? '' })}</p>
             {dependents > 0 && <p className="font-medium text-destructive">{t('revokeCascade', { count: dependents })}</p>}
             <p>{t('revokeIndependent')}</p>
           </div>
@@ -134,9 +157,12 @@ function GrantNode({ node, level, onRevoke }: { node: Node; level: number; onRev
         ) : !g.effective ? (
           <Badge variant="warning">{t('statusInactive')}</Badge>
         ) : (
-          <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={() => onRevoke(g.id)}>
-            <UserX aria-hidden /> {t('revoke')}
-          </Button>
+          <>
+            <Badge variant="muted">{t('readOnly')}</Badge>
+            <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={() => onRevoke(g.id)}>
+              <UserX aria-hidden /> {t('revoke')}
+            </Button>
+          </>
         )}
       </div>
       {node.children.length > 0 && (

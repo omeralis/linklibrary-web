@@ -11,11 +11,14 @@ export function RemoteImage({
   alt = '',
   className,
   fallback,
+  onError,
 }: {
   src: string | null | undefined;
   alt?: string;
   className?: string;
   fallback?: React.ReactNode;
+  /** Called once when the image fails to load (lets a parent hide its frame). */
+  onError?: () => void;
 }) {
   const [failed, setFailed] = React.useState(false);
   const url = safeImageUrl(src);
@@ -27,7 +30,10 @@ export function RemoteImage({
       loading="lazy"
       decoding="async"
       referrerPolicy="no-referrer"
-      onError={() => setFailed(true)}
+      onError={() => {
+        setFailed(true);
+        onError?.();
+      }}
       className={cn('object-cover', className)}
     />
   );

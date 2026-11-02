@@ -11,9 +11,10 @@
 | Stack | Next.js 16.4.3 (App Router, Turbopack) · React 19.3 · TypeScript strict · Tailwind v4 · shadcn/ui · next-intl 4 · TanStack Query 5 · RHF + Zod 4 |
 | Build | ✅ `next build` passes (47 static pages + dynamic public routes) |
 | Typecheck / lint | ✅ `tsc --noEmit` clean · ✅ ESLint clean (0 errors, 0 warnings) |
-| Unit + component tests | ✅ 80 / 80 (Vitest, 8 files) |
-| E2E | ✅ 22 / 22 (Playwright, Chromium desktop + Pixel 7), 1 opt-in screenshot test skipped by default |
-| i18n | ✅ 1 061 keys in `ar.json` and `en.json`, parity + usage check |
+| Unit + component tests | ✅ 81 / 81 (Vitest, 8 files) |
+| E2E (mock contract double) | ✅ 22 / 22 (Playwright, `e2e/mock`) — not proof of integration |
+| E2E (**real Laravel + PostgreSQL**, cloud sandbox) | ✅ 42 / 42 (`e2e/real`); Windows run NOT VERIFIED — see `docs/REAL_BACKEND_INTEGRATION_REPORT.md` |
+| i18n | ✅ 1 083 keys in `ar.json` and `en.json`, parity + usage check |
 | Dependency audit | ✅ 0 vulnerabilities in production dependencies; 18 moderate in ESLint's dev-only toolchain (`minimatch` via eslint-plugin-*) |
 | GitHub | ⏳ Local repo on `main`, commit ready; **remote not yet created** — needs the owner's GitHub authorization (see §7) |
 
@@ -91,8 +92,8 @@ E2E content: 12 core journeys in one session (register → verify → login → 
 
 | Item | Status |
 |---|---|
-| Run the app and `npm run test:e2e`-equivalent checks against the **real backend** on Windows (`php artisan serve` + queue worker) | OPEN — needs the local machine |
-| OpenAPI `Envelope.data` emitted as `[]` | Worked around in `scripts/generate-api-types.mjs`; backend fix suggested |
+| Real-backend checks | DONE in the cloud sandbox (42 E2E tests). Re-run on Windows (PG18, storage link, doctor --network): OPEN |
+| OpenAPI `Envelope.data` emitted as `[]` | FIXED at the source (backend `build-openapi.php`, 2026-11-02); workaround removed |
 | No API for: declining an invitation, viewer leaving a share (own grant id), bulk actions, listing all public collections, contact form | Documented; UI omits these |
 | Uploaded-vs-URL cover detection uses `/storage/` heuristic | Backend field suggested |
 | Public lists can lag up to 30 s after publishing | By design (ISR = API cache window) |
@@ -111,12 +112,20 @@ E2E content: 12 core journeys in one session (register → verify → login → 
 
 ## 8. Next task
 
-1. Publish to GitHub (§7).
-2. Start the backend (README §2) and the frontend (`npm install && npm run dev`), sign in as `demo@linklibrary.test`, and walk the 12 journeys against the real API; record results here.
-3. Optional: run `E2E_API_URL=http://localhost:8000 npx playwright test e2e/i18n.spec.ts e2e/a11y.spec.ts e2e/mobile.spec.ts` against the real API.
+1. Publish to GitHub (§7) — needs the owner's `gh` authentication.
+2. Re-run the real suite on Windows against an isolated DB (README "Two separate E2E suites"); run `php artisan storage:link` and `php artisan linklibrary:doctor --network`.
+3. Configure a real threat-intel provider (Web Risk / Safe Browsing) so links can become CLEAR in production.
+
+## 8b. 2026-11-02 — real-backend audit (summary)
+
+Fixed: trash placeholder bug, hydration mismatch, select a11y names, status separation ("ready ≠ cleared"),
+library/detail/sharing layout, revocation impact dialog (mirrors the backend rule), bidi isolation.
+Backend (separate commit): recursive-revocation counting/notification fix, OpenAPI fixes. Details and
+results: `docs/REAL_BACKEND_INTEGRATION_REPORT.md`.
 
 ## 9. Session history
 
 | Date | Summary |
 |---|---|
+| 2026-11-02 | Real-backend integration audit: 42 real E2E tests, backend + frontend fixes, report written. |
 | 2026-11-01 → 02 | Inspected backend handoff, OpenAPI, routes, resources and `.env`; built the complete frontend; 80 unit/component + 22 E2E tests passing; docs written; delivered to `E:\Dev\linklibrary-web`; GitHub push pending authorization. |

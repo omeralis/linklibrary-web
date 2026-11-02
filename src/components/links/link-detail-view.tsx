@@ -25,7 +25,7 @@ import { LinkOverview } from './link-overview';
 import { OpenLinkButton } from './open-link-button';
 import { ProcessingPanel } from './processing-panel';
 import { SecurityPanel } from './security-panel';
-import { ProcessingBadge, SecurityBadge, VisibilityBadge } from './status-badges';
+import { LinkStatusSummary } from './status-badges';
 
 const TABS = ['overview', 'edit', 'security', 'sharing'] as const;
 type Tab = (typeof TABS)[number];
@@ -85,11 +85,9 @@ export function LinkDetailView({ id }: { id: string }) {
               {link.site_name || link.hostname}
             </span>
           </div>
-          <h1 className="text-2xl font-semibold tracking-tight text-balance break-words">{link.title}</h1>
+          <h1 className="text-2xl font-semibold tracking-tight text-balance break-words"><bdi>{link.title}</bdi></h1>
           <div className="mt-3 flex flex-wrap items-center gap-1.5">
-            <ProcessingBadge status={link.processing_status} hideWhenDone={false} />
-            <SecurityBadge status={link.security.status} />
-            <VisibilityBadge visibility={link.visibility} />
+            <LinkStatusSummary processing={link.processing_status} security={link.security.status} visibility={link.visibility} />
           </div>
         </div>
         <div className="flex shrink-0 flex-wrap items-center gap-2">

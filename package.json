@@ -13,7 +13,8 @@
     "test:e2e": "playwright test",
     "api:types": "node scripts/generate-api-types.mjs",
     "i18n:check": "node scripts/check-i18n.mjs",
-    "check": "npm run i18n:check && npm run typecheck && npm run lint && npm run test"
+    "check": "npm run i18n:check && npm run typecheck && npm run lint && npm run test",
+    "test:e2e:real": "playwright test -c playwright.real.config.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

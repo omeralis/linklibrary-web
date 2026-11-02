@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { ApiError } from '@/lib/api/errors';
 import { shouldRetry, retryDelay } from '@/lib/query-client';
 import { isProcessing, linkHref, publishRestriction, securityTone, shareRestriction } from '@/lib/link-status';
-import { buildGrantTree, countDependents } from '@/components/sharing/access-graph';
+import { buildGrantTree, countDependents, revocationImpact } from '@/components/sharing/access-graph';
 import { categoryName, formatNumber, formatRelative, initials } from '@/lib/format';
 import type { Grant } from '@/lib/api/types';
 import { ownedLink } from '../fixtures';
@@ -67,6 +67,16 @@ describe('access graph', () => {
     expect(tree.map((n) => n.grant.id)).toEqual(['a', 'e']);
     expect(countDependents(tree[0])).toBe(2); // b and c are effective; d is not
     expect(countDependents(tree[1])).toBe(0);
+  });
+  it('counts people (not grants) who lose access and honours independent paths', () => {
+    const user = (grant: Grant, username: string): Grant => ({ ...grant, grantee: { username, name: username } });
+    // owner → bob → carol, owner → bob → dave, owner → dave (direct)
+    const grants = [user(g('1', null), 'bob'), user(g('2', '1'), 'carol'), user(g('3', '1'), 'dave'), user(g('4', null), 'dave')];
+    const tree = buildGrantTree(grants);
+    expect(revocationImpact(grants, tree[0])).toEqual({ targetLoses: true, dependents: 1 }); // carol only; dave keeps
+    // Revoking dave's reshared grant: dave keeps access through the direct grant.
+    expect(revocationImpact(grants, tree[0].children[1])).toEqual({ targetLoses: false, dependents: 0 });
+    expect(revocationImpact(grants, tree[1])).toEqual({ targetLoses: false, dependents: 0 });
   });
   it('treats grants with an invisible parent as roots (viewer view)', () => {
     expect(buildGrantTree([g('x', 'missing')]).map((n) => n.grant.id)).toEqual(['x']);

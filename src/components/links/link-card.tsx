@@ -1,5 +1,6 @@
 'use client';
 
+import * as React from 'react';
 import { Star, Users } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
@@ -16,6 +17,7 @@ import { isProcessing, linkHref } from '@/lib/link-status';
 import { useToggleFavorite } from '@/hooks/use-links';
 import { useErrorMessage } from '@/hooks/use-error-message';
 import { cn } from '@/lib/utils';
+import { safeImageUrl } from '@/lib/url';
 import { ProcessingBadge, SecurityBadge, VisibilityBadge } from './status-badges';
 import { LinkActionsMenu } from './link-actions-menu';
 
@@ -125,7 +127,7 @@ export function LinkCard({
         <div className="min-w-0 flex-1 space-y-1">
           <h3 className="truncate text-sm font-medium">
             <Link href={href} className="after:absolute after:inset-0 focus-visible:outline-none">
-              {link.title}
+              <bdi>{link.title}</bdi>
             </Link>
           </h3>
           <Meta link={link} />
@@ -148,17 +150,15 @@ export function LinkCard({
       className="group relative flex flex-col overflow-hidden rounded-xl border bg-card shadow-xs transition-[border-color,box-shadow] hover:border-ring/40 hover:shadow-sm"
       aria-busy={busy}
     >
-      <div className="aspect-[1.91/1] overflow-hidden border-b bg-muted">
-        <Thumbnail link={link} className="transition-transform duration-300 group-hover:scale-[1.02]" />
-      </div>
-      <div className="flex flex-1 flex-col gap-2.5 p-4">
+      <CardMedia src={link.image_url} />
+      <div className="flex flex-1 flex-col gap-2 p-4">
         <Meta link={link} />
         <h3 className="line-clamp-2 leading-snug font-semibold">
           <Link href={href} className="after:absolute after:inset-0 focus-visible:outline-none">
-            {link.title}
+            <bdi>{link.title}</bdi>
           </Link>
         </h3>
-        {link.description && <p className="line-clamp-2 text-sm text-muted-foreground">{link.description}</p>}
+        {link.description && <p className="line-clamp-2 text-sm text-muted-foreground"><bdi>{link.description}</bdi></p>}
         <div className="mt-auto flex items-end justify-between gap-2 pt-1">
           <div className="relative z-10 min-w-0">
             <StatusRow link={link} />
@@ -166,7 +166,7 @@ export function LinkCard({
               <ul className="mt-2 flex flex-wrap gap-1">
                 {link.tags.slice(0, 4).map((tag) => (
                   <li key={tag.slug} className="text-xs text-muted-foreground">
-                    #{tag.name}
+                    <bdi>#{tag.name}</bdi>
                   </li>
                 ))}
               </ul>
@@ -184,6 +184,33 @@ export function LinkCard({
   );
 }
 
+/**
+ * Grid media: a 2:1 preview when the page has an image (object-cover, never stretched); otherwise
+ * nothing, so image-less cards stay compact instead of showing an empty placeholder.
+ */
+export function CardMedia({ src }: { src: string | null | undefined }) {
+  const [failed, setFailed] = React.useState(false);
+  const url = safeImageUrl(src);
+  if (url && !failed) {
+    return (
+      <div className="aspect-[2/1] overflow-hidden border-b bg-muted">
+        {/* eslint-disable-next-line @next/next/no-img-element -- third-party preview images */}
+        <img
+          src={url}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          referrerPolicy="no-referrer"
+          onError={() => setFailed(true)}
+          className="size-full object-cover transition-transform duration-300 group-hover:scale-[1.02] motion-reduce:transition-none"
+        />
+      </div>
+    );
+  }
+  // No (working) image: no placeholder band — the card's meta line already shows the source.
+  return null;
+}
+
 export function LinkCardSkeleton({ view = 'grid' }: { view?: LinkView }) {
   if (view === 'list') {
     return (
@@ -198,11 +225,14 @@ export function LinkCardSkeleton({ view = 'grid' }: { view?: LinkView }) {
   }
   return (
     <div className="overflow-hidden rounded-xl border bg-card">
-      <Skeleton className="aspect-[1.91/1] rounded-none" />
       <div className="space-y-2.5 p-4">
         <Skeleton className="h-3 w-1/3" />
         <Skeleton className="h-4 w-5/6" />
         <Skeleton className="h-3 w-full" />
+        <div className="flex gap-2 pt-2">
+          <Skeleton className="h-5 w-16 rounded-full" />
+          <Skeleton className="h-5 w-20 rounded-full" />
+        </div>
       </div>
     </div>
   );
@@ -223,7 +253,8 @@ export function LinkGrid({
   publicContext?: boolean;
   skeletonCount?: number;
 }) {
-  const cls = view === 'grid' ? 'grid gap-4 sm:grid-cols-2 xl:grid-cols-3' : 'flex flex-col gap-2';
+  // auto-fill keeps cards at a comfortable width whether there is one link or hundreds.
+  const cls = view === 'grid' ? 'grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(min(100%,17.5rem),1fr))]' : 'flex flex-col gap-2';
   if (loading) {
     return (
       <div className={cls} aria-busy>

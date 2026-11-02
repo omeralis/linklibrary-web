@@ -1,6 +1,6 @@
 'use client';
 
-import { AlertTriangle, Ban, Loader2, RefreshCw } from 'lucide-react';
+import { AlertTriangle, Ban, Loader2, RefreshCw, ShieldQuestion } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -55,9 +55,16 @@ export function ProcessingPanel({ link }: { link: OwnedLink }) {
       <div className="rounded-xl border bg-card p-4" role="status" aria-live="polite">
         <div className="mb-3 flex items-center gap-2 font-medium">
           <Loader2 className="size-4 animate-spin text-primary" aria-hidden />
-          {t('runningTitle')}
+          {processing.extraction_error_code ? t('retryingTitle') : t('runningTitle')}
         </div>
-        <p className="mb-3 text-sm text-muted-foreground">{t('runningBody')}</p>
+        <p className="mb-3 text-sm text-muted-foreground">
+          {processing.extraction_error_code ? t('retryingBody') : t('runningBody')}
+        </p>
+        {processing.extraction_error_code && (
+          <p className="-mt-2 mb-3 font-mono text-xs text-muted-foreground" title={t('technicalCode')}>
+            {processing.extraction_error_code}
+          </p>
+        )}
         <div className="grid gap-1.5 rounded-lg bg-muted/60 p-3">
           <Stage label={t('stages.security')} value={processing.security} />
           <Stage label={t('stages.extraction')} value={processing.extraction} />
@@ -66,6 +73,16 @@ export function ProcessingPanel({ link }: { link: OwnedLink }) {
       </div>
     );
   }
+
+  const securityStatus = processing.security ?? link.security.status;
+  const notCleared = (status === 'COMPLETED' || status === 'PARTIAL') && securityStatus !== 'CLEAR';
+  const securityNotice = notCleared ? (
+    <Alert variant="info" data-testid="ready-not-cleared">
+      <ShieldQuestion aria-hidden />
+      <AlertTitle>{t('readyNotClearedTitle')}</AlertTitle>
+      <AlertDescription>{t(`readyNotCleared.${securityStatus}`)}</AlertDescription>
+    </Alert>
+  ) : null;
 
   if (status === 'FAILED') {
     return (
@@ -83,14 +100,17 @@ export function ProcessingPanel({ link }: { link: OwnedLink }) {
 
   if (status === 'PARTIAL') {
     return (
-      <Alert variant="info">
-        <AlertTriangle aria-hidden />
-        <AlertTitle>{t('partialTitle')}</AlertTitle>
-        <AlertDescription>
-          <p>{t('partialBody')}</p>
-          {reanalyzeButton}
-        </AlertDescription>
-      </Alert>
+      <div className="grid gap-3">
+        <Alert variant="info">
+          <AlertTriangle aria-hidden />
+          <AlertTitle>{t('partialTitle')}</AlertTitle>
+          <AlertDescription>
+            <p>{t('partialBody')}</p>
+            {reanalyzeButton}
+          </AlertDescription>
+        </Alert>
+        {securityNotice}
+      </div>
     );
   }
 
@@ -106,5 +126,5 @@ export function ProcessingPanel({ link }: { link: OwnedLink }) {
     );
   }
 
-  return null;
+  return securityNotice;
 }

@@ -165,7 +165,7 @@ function AddLinkForm({ onClose, initialUrl, initialCollection }: { onClose: () =
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{tf('category')}</FormLabel>
-                      <CategorySelect value={field.value} onChange={field.onChange} noneLabel={tf('categoryAuto')} />
+                      <CategorySelect value={field.value} onChange={field.onChange} noneLabel={tf('categoryAuto')} ariaLabel={tf('category')} />
                       <FormMessage />
                     </FormItem>
                   )}

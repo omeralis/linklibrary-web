@@ -2090,7 +2090,7 @@ export type paths = {
     get?: never;
     put?: never;
     post?: never;
-    /** Revoke a grant and all dependent grants (owner, grantor, or the grantee leaving) */
+    /** Revoke a grant and all dependent grants (owner, grantor, or the grantee leaving). Users who still hold a valid grant through an independent path keep access and are neither counted nor notified. */
     delete: {
       parameters: {
         query?: never;
@@ -2111,7 +2111,12 @@ export type paths = {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['Envelope'];
+            'application/json': components['schemas']['Envelope'] & {
+              data?: {
+                /** @description Number of users who lost all access to the link */
+                revoked_users: number;
+              };
+            };
           };
         };
         401: components['responses']['Unauthenticated'];
@@ -3671,6 +3676,7 @@ export type components = {
       /** @constant */
       success: true;
       message?: string | null;
+      /** @description Response payload (any JSON value; null for message-only responses). Each operation narrows it with allOf. */
       data?: unknown;
       meta?: Record<string, unknown>;
     };

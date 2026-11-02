@@ -1,6 +1,6 @@
 import { expect, type Page } from '@playwright/test';
 
-export const API = process.env.E2E_API_URL ?? 'http://localhost:8787';
+export const API = 'http://localhost:8787';
 export const PASSWORD = 'Password12345';
 
 export async function resetApi() {
@@ -41,6 +41,6 @@ export function watchConsole(page: Page) {
     const text = msg.text();
     if (/MISSING_MESSAGE|Hydration|hydrat/i.test(text)) problems.push(text);
   });
-  page.on('pageerror', (err) => problems.push(`pageerror: ${err.message}`));
+  page.on('pageerror', (err) => problems.push(`pageerror: ${err.message} @ ${page.url()}`));
   return problems;
 }

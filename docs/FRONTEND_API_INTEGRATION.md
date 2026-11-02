@@ -127,11 +127,13 @@ Contract sources: `E:\Dev\LinkLibrary\docs\FRONTEND_INTEGRATION_HANDOFF.md`, `do
   optional; `src/lib/api/contract-check.ts` asserts at compile time that every curated type is assignable
   to its generated schema — a renamed field or changed enum in the backend spec fails `npm run typecheck`.
 
-## 4. Backend observations (no backend changes were made)
+## 4. Backend observations
 
 | # | Observation | Impact / workaround |
 |---|---|---|
-| 1 | `components.schemas.Envelope.properties.data` is serialised as `[]` (empty PHP array) instead of `{}` in `openapi.yaml`. | openapi-typescript rejects it; the generator script patches it before generating. Suggested backend fix: emit `(object) []` / `new \stdClass` in `scripts/build-openapi.php`. |
+| 1 | ~~`Envelope.data` serialised as `[]`~~ — **fixed at the source** (2026-11-02, backend `scripts/build-openapi.php`): `data` is now an any-value schema with a description. | The generator no longer patches the spec; it refuses a spec that still contains `data: []`. |
+| 1b | `DELETE /links/{id}/access/{grantId}` was documented as a message-only response. | Now documented as `{ revoked_users: integer }` (users who lost all access) and covered by the backend contract test. |
+| 1c | Recursive revocation counted and notified users who kept access through an independent path. | **Fixed in the backend** (2026-11-02): only users without any remaining valid grant are counted/notified; the UI's confirmation uses the same rule (`revocationImpact`). |
 | 2 | No endpoint for a recipient to **decline** an invitation. | Pending invitations can be accepted or left to expire; owners/inviters can revoke. |
 | 3 | A viewer cannot see the id of their own grant (`GET …/access` lists only grants they issued), so "leave a shared link" (`DELETE …/access/{ownGrantId}`) can't be offered. | Not shown in the UI. Suggested: include `my_grant_id` in the viewer representation. |
 | 4 | No bulk endpoints (bulk delete/favorite/visibility). | Per-item actions only; adding many links to a collection uses the existing batch endpoint (≤100). |
@@ -148,3 +150,11 @@ From `E:\Dev\LinkLibrary\.env` and `config/cors.php`:
 `sanctum/csrf-cookie`, credentials allowed, allowed headers include `X-XSRF-TOKEN`, `X-Requested-With`
 and `Accept-Language`, `Retry-After` exposed. These match the frontend defaults in `.env.example`.
 `AI_PROVIDER=null` (AI disabled) — the UI shows the "AI enrichment is turned off" state.
+
+## 6. Real-backend verification (2026-11-02)
+
+The integration was exercised end-to-end against the real Laravel 13 API and PostgreSQL by the
+`e2e/real` Playwright suite (42 tests passing). Results, environment and remaining limitations:
+`docs/REAL_BACKEND_INTEGRATION_REPORT.md`. Contract chain: backend `FrontendContractTest` validates real
+responses against `openapi.yaml`; `src/lib/api/contract-check.ts` asserts the frontend types against the
+types generated from the same file.
