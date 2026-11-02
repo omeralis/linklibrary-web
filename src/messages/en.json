@@ -1,0 +1,1290 @@
+{
+  "meta": {
+    "tagline": "Your links, organized and safely shared",
+    "description": "Save links, let them organize themselves, find anything in Arabic or English, and share privately — with every destination security-checked first.",
+    "pages": {
+      "dashboard": "Overview",
+      "library": "My library",
+      "favorites": "Favorites",
+      "linkDetail": "Link details",
+      "collections": "Collections",
+      "collectionDetail": "Collection",
+      "shared": "Shared with me",
+      "search": "Search",
+      "notifications": "Notifications",
+      "settings": "Settings",
+      "admin": "Administration",
+      "login": "Sign in",
+      "register": "Create account",
+      "forgotPassword": "Forgot password",
+      "resetPassword": "Reset password",
+      "verifyEmail": "Verify e-mail",
+      "acceptInvitation": "Accept invitation"
+    }
+  },
+  "common": {
+    "cancel": "Cancel",
+    "close": "Close",
+    "confirm": "Confirm",
+    "save": "Save",
+    "language": "Language",
+    "skipToContent": "Skip to content",
+    "theme": {
+      "label": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "pagination": {
+      "label": "Pagination",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {page}",
+      "pageOf": "Page {page} of {total}",
+      "results": "{count, plural, one {# result} other {# results}}"
+    }
+  },
+  "validation": {
+    "required": "This field is required.",
+    "max": "Must be at most {value} characters.",
+    "min": "Must be at least {value} characters.",
+    "email": "Enter a valid e-mail address.",
+    "url": "Enter a valid http(s) web address.",
+    "username": "Use 3–30 lowercase letters, numbers or underscores.",
+    "passwordMin": "Use at least {value} characters.",
+    "passwordLetters": "Include at least one letter.",
+    "passwordNumbers": "Include at least one number.",
+    "passwordMatch": "Passwords do not match.",
+    "passwordDifferent": "The new password must differ from the current one.",
+    "maxItems": "You can add up to {value} items.",
+    "typeDelete": "Type DELETE to confirm."
+  },
+  "errors": {
+    "title": "Something went wrong",
+    "generic": "The request could not be completed. Please try again.",
+    "retry": "Try again",
+    "networkTitle": "Can't reach the server",
+    "notAvailableTitle": "Not available",
+    "notAvailableBody": "This item doesn't exist or you don't have access to it.",
+    "rateLimitedRetry": "Too many requests. Please wait {seconds} seconds and try again.",
+    "boundaryTitle": "This page hit an unexpected error",
+    "boundaryBody": "The problem has been noted. You can try again; your data is safe.",
+    "codes": {
+      "UNAUTHENTICATED": "Please sign in to continue.",
+      "FORBIDDEN": "You don't have permission to do that.",
+      "EMAIL_NOT_VERIFIED": "Please verify your e-mail address first.",
+      "ACCOUNT_SUSPENDED": "This account is suspended.",
+      "LINK_SECURITY_BLOCKED": "This link is blocked by the security policy.",
+      "INVALID_SIGNATURE": "This link is invalid or has expired.",
+      "INVALID_VERIFICATION_LINK": "This verification link is invalid or has expired.",
+      "NOT_FOUND": "This item doesn't exist or you don't have access to it.",
+      "INVITATION_NOT_FOUND": "This invitation wasn't found for the account you're signed in with.",
+      "ALREADY_SHARED": "This person already has access.",
+      "ALREADY_OWNER": "You can't invite the owner of this link.",
+      "GRANT_CYCLE": "This invitation would create a sharing loop.",
+      "INVITATION_NOT_PENDING": "This invitation is no longer pending.",
+      "TOO_MANY_PENDING_INVITATIONS": "Too many pending invitations for this link. Revoke some first.",
+      "APPEAL_ALREADY_PENDING": "A review request for this link is already pending.",
+      "NOT_DELETED": "This link is not in the trash.",
+      "CONFLICT": "The request conflicts with the current state. Refresh and try again.",
+      "INVITATION_EXPIRED": "This invitation has expired. Ask the sender for a new one.",
+      "CSRF_TOKEN_MISMATCH": "Your session expired. Refresh the page and try again.",
+      "VALIDATION_ERROR": "Please check the highlighted fields.",
+      "INVALID_URL": "This web address isn't valid.",
+      "URL_NOT_ALLOWED": "This address points to a destination that isn't allowed.",
+      "LINK_NOT_PUBLISHABLE": "This link can't be published until it passes the security check.",
+      "LINK_NOT_SHAREABLE": "This link can't be shared until it passes the security check.",
+      "CANNOT_SHARE_WITH_SELF": "You can't share a link with yourself.",
+      "INVALID_LINKS": "Some of the selected links are not available.",
+      "INVALID_ORDER": "The new order doesn't match the collection. Refresh and try again.",
+      "COLLECTION_FULL": "This collection has reached its maximum size.",
+      "INVALID_IMAGE": "The image couldn't be processed. Use a JPEG, PNG, WebP or GIF under 2 MB.",
+      "APPEAL_NOT_APPLICABLE": "Reviews can only be requested for links flagged as suspicious or malicious.",
+      "LINK_BLOCKED": "This link is blocked by the security policy.",
+      "INVALID_RESET_TOKEN": "This password reset link is invalid or has expired.",
+      "RATE_LIMITED": "Too many requests. Please slow down and try again shortly.",
+      "SERVER_ERROR": "The server ran into a problem. Please try again later.",
+      "SERVICE_UNAVAILABLE": "The service is temporarily unavailable. Please try again later.",
+      "NETWORK_ERROR": "Check your connection and make sure the API server is running.",
+      "TIMEOUT": "The server took too long to respond. Please try again."
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "primary": "Main",
+    "menu": "Menu",
+    "openMenu": "Open menu",
+    "explore": "Explore",
+    "howItWorks": "How it works",
+    "security": "Security",
+    "about": "About",
+    "login": "Sign in",
+    "getStarted": "Get started",
+    "dashboard": "Dashboard",
+    "dashboardNav": "Dashboard",
+    "overview": "Overview",
+    "library": "My library",
+    "favorites": "Favorites",
+    "collections": "Collections",
+    "shared": "Shared with me",
+    "search": "Search",
+    "notifications": "Notifications",
+    "settings": "Settings",
+    "admin": "Administration",
+    "accountMenu": "Account menu",
+    "publicProfile": "Public profile",
+    "logout": "Sign out",
+    "addLink": "Add link",
+    "openSearch": "Open search",
+    "searchPlaceholder": "Search your library…"
+  },
+  "footer": {
+    "blurb": "A calm place for everything worth keeping on the web — organized, searchable and shared on your terms.",
+    "product": "Product",
+    "company": "Company",
+    "legal": "Legal",
+    "features": "Features",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "copyright": "© {year} {brand}",
+    "securityNote": "Security checks reduce risk but can't guarantee a website is safe."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "The page you're looking for doesn't exist or has moved.",
+    "home": "Back home",
+    "explore": "Explore links"
+  },
+  "legal": {
+    "draftTitle": "Draft — pending legal review",
+    "draftBody": "This text describes how the product currently works. It is a draft, has not been reviewed by a lawyer and is not a binding legal document.",
+    "updated": "Last updated {date}"
+  },
+  "auth": {
+    "privacyLink": "Privacy",
+    "termsLink": "Terms",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "loggedOut": "You've been signed out.",
+    "sessionExpired": "Your session has expired. Please sign in again.",
+    "suspended": "This account is suspended.",
+    "login": {
+      "title": "Welcome back",
+      "description": "Sign in to your library.",
+      "email": "E-mail",
+      "password": "Password",
+      "forgot": "Forgot password?",
+      "remember": "Keep me signed in",
+      "submit": "Sign in",
+      "success": "Signed in.",
+      "noAccount": "New here? <link>Create an account</link>"
+    },
+    "register": {
+      "title": "Create your account",
+      "description": "Free to start. Your links stay private unless you choose otherwise.",
+      "name": "Full name",
+      "username": "Username",
+      "usernameHint": "Used for your public profile: 3–30 lowercase letters, numbers or underscores.",
+      "email": "E-mail",
+      "password": "Password",
+      "passwordConfirm": "Confirm password",
+      "passwordHint": "At least 10 characters, with letters and numbers.",
+      "submit": "Create account",
+      "success": "Account created. Check your e-mail to verify your address.",
+      "haveAccount": "Already have an account? <link>Sign in</link>",
+      "legal": "By creating an account you agree to the <terms>Terms</terms> and acknowledge the <privacy>Privacy Policy</privacy>."
+    },
+    "forgot": {
+      "title": "Reset your password",
+      "description": "Enter your account e-mail and we'll send you a reset link.",
+      "email": "E-mail",
+      "submit": "Send reset link",
+      "sent": "If an account exists for that address, a reset link has been sent.",
+      "checkSpam": "The link is valid for a limited time. Check your spam folder if it doesn't arrive.",
+      "back": "Back to sign in"
+    },
+    "reset": {
+      "title": "Choose a new password",
+      "description": "Other sessions will be signed out after the reset.",
+      "email": "E-mail",
+      "password": "New password",
+      "passwordConfirm": "Confirm new password",
+      "submit": "Reset password",
+      "success": "Your password has been reset. Sign in with the new password.",
+      "invalidTitle": "Invalid reset link",
+      "invalidBody": "This link is incomplete. Request a new password reset e-mail.",
+      "requestNew": "Request a new link"
+    },
+    "verify": {
+      "verifyingTitle": "Verifying your e-mail…",
+      "successTitle": "E-mail verified",
+      "success": "Your e-mail address has been verified.",
+      "errorTitle": "Verification failed",
+      "missingTitle": "Incomplete verification link",
+      "missingBody": "Open the link from the e-mail exactly as received, or request a new one.",
+      "resend": "Send a new verification e-mail",
+      "resent": "A new verification link has been sent.",
+      "loginToResend": "Sign in to request a new link",
+      "toDashboard": "Go to dashboard",
+      "toLogin": "Sign in"
+    },
+    "verifyBanner": {
+      "message": "Verify <b>{email}</b> to publish links, create public collections and send invitations.",
+      "resend": "Resend e-mail",
+      "sent": "Verification e-mail sent."
+    }
+  },
+  "security": {
+    "label": "Security",
+    "status": {
+      "PENDING": "Checking",
+      "CLEAR": "No threats found",
+      "UNKNOWN": "Not verified",
+      "SUSPICIOUS": "Suspicious",
+      "MALICIOUS": "Dangerous"
+    },
+    "explain": {
+      "PENDING": "The security check is still running. Publishing and sharing unlock once it finishes.",
+      "CLEAR": "The reputation providers found no known threats. This lowers risk but doesn't guarantee the site is safe.",
+      "UNKNOWN": "The destination couldn't be verified by a reputation provider, so it can't be published or shared. You can still open it at your own risk.",
+      "SUSPICIOUS": "The destination shows warning signs. It can't be published or shared, and people you shared it with can't open it.",
+      "MALICIOUS": "The destination is known to be dangerous. It can't be opened, published or shared."
+    },
+    "restrictionReason": {
+      "PENDING": "The security check hasn't finished yet. Try again in a moment.",
+      "CLEAR": "Publishing and sharing are not available for this link right now.",
+      "UNKNOWN": "Only links with no threats found can be published or shared. This one couldn't be verified — run a rescan later.",
+      "SUSPICIOUS": "Links flagged as suspicious can't be published or shared. If you think this is a mistake, request a review.",
+      "MALICIOUS": "Links flagged as dangerous can't be published, shared or opened. If you think this is a mistake, request a review."
+    },
+    "details": {
+      "title": "Security status",
+      "source": "Verdict source",
+      "sources": {
+        "PROVIDER": "Reputation provider",
+        "MANUAL_REVIEW": "Manual review"
+      },
+      "checkedAt": "Last checked",
+      "expiresAt": "Verdict valid until",
+      "storedStatus": "Last recorded verdict",
+      "never": "Not checked yet",
+      "rescan": "Rescan now",
+      "rescanQueued": "A security re-scan has been queued.",
+      "capabilities": "What's allowed",
+      "canOpen": "Open the destination",
+      "canPublish": "Publish publicly",
+      "canShare": "Share privately",
+      "allowed": "Allowed",
+      "notAllowed": "Not allowed",
+      "restrictedTitle": "Why some actions are unavailable",
+      "appealTitle": "Request a review",
+      "appealDescription": "If you believe this verdict is wrong, explain why. An administrator will review it.",
+      "appealReason": "Reason",
+      "appealHint": "10–2000 characters. Include anything that helps verify the site.",
+      "appealSubmit": "Submit review request",
+      "appealSent": "Your review request has been submitted.",
+      "appealStatus": {
+        "PENDING": "Pending review",
+        "APPROVED": "Approved",
+        "REJECTED": "Rejected"
+      },
+      "reviewerNotes": "Reviewer notes: {notes}",
+      "historyTitle": "Scan history",
+      "historyEmpty": "No scans recorded yet.",
+      "colDate": "Date",
+      "colTrigger": "Trigger",
+      "colResult": "Result"
+    }
+  },
+  "links": {
+    "sharedBy": "From {name}",
+    "visibility": {
+      "PRIVATE": "Private",
+      "PUBLIC": "Public"
+    },
+    "sourceTypes": {
+      "WEBSITE": "Website",
+      "ARTICLE": "Article",
+      "VIDEO": "Video",
+      "PLAYLIST": "Playlist",
+      "PDF": "PDF",
+      "REPOSITORY": "Repository",
+      "IMAGE": "Image",
+      "AUDIO": "Audio",
+      "DOCUMENT": "Document",
+      "OTHER": "Other"
+    },
+    "restrictions": {
+      "emailNotVerified": "Verify your e-mail address to publish and share links.",
+      "security_PENDING": "The security check is still running. Publishing and sharing unlock when it finishes with no threats found.",
+      "security_UNKNOWN": "This link couldn't be verified by a security provider, so it can't be published or shared. Try a rescan from the Security tab later.",
+      "security_SUSPICIOUS": "This link was flagged as suspicious, so it can't be published or shared. You can request a review from the Security tab.",
+      "security_MALICIOUS": "This link was flagged as dangerous, so it can't be published, shared or opened. You can request a review from the Security tab.",
+      "security_CLEAR": "This action isn't available for this link right now."
+    },
+    "fields": {
+      "url": "Web address",
+      "title": "Title",
+      "customTitle": "Custom title",
+      "customTitlePlaceholder": "Leave empty to use the page's own title",
+      "description": "Description",
+      "category": "Category",
+      "categoryPlaceholder": "Choose a category",
+      "categoryNone": "No category",
+      "categoryAuto": "Automatic",
+      "tags": "Tags",
+      "notes": "Private notes",
+      "notesPlaceholder": "Why you saved it, what to remember…",
+      "notesHint": "Only you can see notes — never people you share with or the public.",
+      "collections": "Add to collections",
+      "sourceType": "Content type",
+      "imageUrl": "Image address"
+    },
+    "tags": {
+      "placeholder": "Add a tag and press Enter",
+      "limit": "Up to {max} tags",
+      "remove": "Remove tag {tag}"
+    },
+    "add": {
+      "title": "Save a link",
+      "description": "Paste any web address. We'll check it, fetch its details and keep it private.",
+      "urlHint": "http and https addresses only.",
+      "moreOptions": "Title, tags, notes and collections",
+      "privacyNote": "New links are always private. You can publish or share them after the security check.",
+      "submit": "Save link",
+      "saved": "Link saved",
+      "savedProcessing": "Checking security and fetching details in the background.",
+      "alreadySaved": "You've already saved this link.",
+      "view": "View"
+    },
+    "library": {
+      "title": "My library",
+      "description": "Everything you've saved, newest first.",
+      "favoritesTitle": "Favorites",
+      "favoritesDescription": "The links you've starred.",
+      "add": "Add link",
+      "addFirst": "Save your first link",
+      "tabAll": "All links",
+      "tabTrash": "Trash",
+      "trashHint": "Deleted links can be restored. Deleting from the trash is permanent.",
+      "emptyTitle": "Your library is empty",
+      "emptyBody": "Save a link to get started — it will be security-checked and organized automatically.",
+      "favoritesEmptyTitle": "No favorites yet",
+      "favoritesEmptyBody": "Star a link to find it here quickly.",
+      "trashEmptyTitle": "Trash is empty",
+      "trashEmptyBody": "Links you delete will appear here.",
+      "noMatchesTitle": "No links match",
+      "noMatchesBody": "Try different words or clear some filters.",
+      "clearFilters": "Clear filters"
+    },
+    "filters": {
+      "searchPlaceholder": "Search titles, descriptions, notes and tags",
+      "filters": "Filters",
+      "category": "Category",
+      "anyCategory": "Any category",
+      "tag": "Tag",
+      "tagPlaceholder": "e.g. design",
+      "sourceType": "Content type",
+      "anyType": "Any type",
+      "visibility": "Visibility",
+      "security": "Security status",
+      "any": "Any",
+      "clear": "Clear filters",
+      "sort": "Sort",
+      "sorts": {
+        "latest": "Newest",
+        "oldest": "Oldest",
+        "title": "Title",
+        "popular": "Most viewed",
+        "relevance": "Best match"
+      },
+      "view": "Layout",
+      "grid": "Grid view",
+      "list": "List view"
+    },
+    "actions": {
+      "menu": "Actions for {title}",
+      "details": "View details",
+      "edit": "Edit",
+      "favorite": "Add to favorites",
+      "unfavorite": "Remove from favorites",
+      "addToCollection": "Add to collection",
+      "copyLink": "Copy link",
+      "copied": "Link copied to clipboard.",
+      "copyFailed": "Couldn't copy to the clipboard.",
+      "delete": "Delete",
+      "deleted": "Link moved to the trash.",
+      "restore": "Restore",
+      "restored": "Link restored.",
+      "deletePermanently": "Delete permanently",
+      "deletedPermanently": "Link permanently deleted.",
+      "confirmDeleteTitle": "Move this link to the trash?",
+      "confirmDeleteBody": "It will be hidden everywhere, including public pages and people you shared it with. You can restore it from the trash.",
+      "confirmPermanentTitle": "Delete permanently?",
+      "confirmPermanentBody": "This removes the link, its notes and sharing for good. This can't be undone."
+    },
+    "open": {
+      "button": "Open",
+      "newTab": "(opens in a new tab)",
+      "blocked": "Blocked",
+      "warningTitle": "Open with caution",
+      "warningBody": "You're leaving LinkLibrary. Don't enter passwords or payment details unless you trust this site.",
+      "stay": "Stay here",
+      "continue": "Continue to site"
+    },
+    "processing": {
+      "status": {
+        "PENDING": "Queued",
+        "PROCESSING": "Processing",
+        "COMPLETED": "Ready",
+        "PARTIAL": "Partial details",
+        "FAILED": "Details unavailable",
+        "BLOCKED": "Blocked"
+      },
+      "stage": {
+        "PENDING": "Waiting",
+        "PROCESSING": "Running",
+        "COMPLETED": "Done",
+        "PARTIAL": "Partial",
+        "FAILED": "Failed",
+        "BLOCKED": "Blocked",
+        "SKIPPED": "Skipped",
+        "DISABLED": "Off",
+        "CLEAR": "No threats found",
+        "UNKNOWN": "Not verified",
+        "SUSPICIOUS": "Suspicious",
+        "MALICIOUS": "Dangerous"
+      },
+      "stages": {
+        "security": "Security check",
+        "extraction": "Page details",
+        "ai": "AI enrichment"
+      },
+      "runningTitle": "Processing this link…",
+      "runningBody": "This usually takes a few seconds. The page updates automatically.",
+      "failedTitle": "We couldn't fetch this page's details",
+      "failedBody": "The site didn't respond or blocked automated access. You can add a title and description yourself, or try again.",
+      "partialTitle": "Only some details were found",
+      "partialBody": "Fill in anything missing from the Edit tab, or try fetching again.",
+      "blockedTitle": "Processing stopped",
+      "blockedSecurity": "The security check flagged this destination, so its content wasn't fetched.",
+      "blockedSource": "The site doesn't allow automated access (robots rules, paywall or similar). Manual details still work.",
+      "reanalyze": "Fetch again",
+      "reanalyzeQueued": "Re-analysis queued."
+    },
+    "ai": {
+      "title": "AI suggestions",
+      "generated": "AI-generated",
+      "disclaimer": "Generated automatically and may be inaccurate. Your own edits always take priority.",
+      "detailed": "Read the detailed summary",
+      "suggestedTitle": "Suggested title",
+      "suggestedCategoryLabel": "Suggested category",
+      "suggestedCategory": "Suggested category: {name}",
+      "suggestedTags": "Suggested tags",
+      "use": "Use",
+      "addTags": "Add tags",
+      "applied": "Suggestion applied.",
+      "disabled": "AI enrichment is turned off on this server. Everything else works normally.",
+      "pending": "AI suggestions will appear here once processing finishes.",
+      "failed": "AI enrichment wasn't available for this link. You can try fetching again later.",
+      "skipped": "AI enrichment was skipped for this link (not enough readable content)."
+    },
+    "detail": {
+      "back": "Back to library",
+      "tabs": {
+        "overview": "Overview",
+        "edit": "Edit",
+        "security": "Security",
+        "sharing": "Sharing"
+      },
+      "inTrash": "This link is in the trash. Restore it to edit or share it.",
+      "noDescription": "No description yet. Add one from the Edit tab.",
+      "notes": "Private notes",
+      "noNotes": "No notes.",
+      "tags": "Tags",
+      "noTags": "No tags yet.",
+      "aiTag": "AI",
+      "removeTag": "Remove tag {tag}",
+      "addTag": "Add tag",
+      "addTagPlaceholder": "New tag",
+      "details": "Details",
+      "url": "Address",
+      "canonical": "Canonical address",
+      "type": "Type",
+      "category": "Category",
+      "language": "Language",
+      "author": "Author",
+      "published": "Published",
+      "saved": "Saved",
+      "updated": "Updated"
+    },
+    "edit": {
+      "title": "Edit details",
+      "description": "Your changes override what was fetched from the page. Leave a field empty to use the original.",
+      "useExtracted": "Use original",
+      "noExtractedDescription": "No description was found on the page",
+      "autoDetected": "Detected: {type}",
+      "tagsHint": "AI-suggested tags are kept separately; remove them from the Overview tab.",
+      "save": "Save changes",
+      "discard": "Discard",
+      "saved": "Changes saved.",
+      "coverTitle": "Cover image",
+      "coverDescription": "Shown on cards and the public page.",
+      "noImage": "No image",
+      "uploadCover": "Upload image",
+      "removeCover": "Remove uploaded image",
+      "coverHint": "JPEG, PNG, WebP or GIF, up to 2 MB.",
+      "coverType": "Use a JPEG, PNG, WebP or GIF image.",
+      "coverSize": "The image must be 2 MB or smaller.",
+      "coverUpdated": "Cover image updated.",
+      "coverRemoved": "Cover image removed."
+    }
+  },
+  "collections": {
+    "title": "Collections",
+    "description": "Group links by project, topic or audience.",
+    "new": "New collection",
+    "searchPlaceholder": "Search collections",
+    "noResults": "No collections match your search.",
+    "emptyTitle": "No collections yet",
+    "emptyBody": "Collections keep related links together. Make one public to share a curated list.",
+    "itemsCount": "{count, plural, =0 {No links} one {# link} other {{formatted} links}}",
+    "visibility": {
+      "PRIVATE": "Private",
+      "PUBLIC": "Public"
+    },
+    "form": {
+      "createTitle": "New collection",
+      "editTitle": "Edit collection",
+      "description": "Name it clearly — public collections are visible to anyone with the link.",
+      "name": "Name",
+      "descriptionLabel": "Description",
+      "visibility": "Visibility",
+      "private": "Private",
+      "privateHint": "Only you can see it.",
+      "public": "Public",
+      "publicHint": "Anyone can view it. Only public links inside are shown.",
+      "publicNeedsVerification": "Verify your e-mail to create public collections.",
+      "cover": "Cover image address",
+      "coverHint": "Optional. An http(s) image address.",
+      "create": "Create collection",
+      "created": "Collection created.",
+      "updated": "Collection updated."
+    },
+    "detail": {
+      "back": "All collections",
+      "addLinks": "Add links",
+      "more": "More actions",
+      "edit": "Edit",
+      "copyPublicLink": "Copy public link",
+      "copied": "Public link copied.",
+      "copyFailed": "Couldn't copy to the clipboard.",
+      "viewPublic": "View public page",
+      "delete": "Delete collection",
+      "deleteTitle": "Delete this collection?",
+      "deleteBody": "The collection is removed, but the links inside stay in your library.",
+      "deleted": "Collection deleted.",
+      "publicNote": "This collection is public. Private links inside it are never shown on the public page.",
+      "emptyTitle": "This collection is empty",
+      "emptyBody": "Add links from your library.",
+      "reorderHint": "Drag the handle to reorder, or focus it and use Space and the arrow keys.",
+      "reordered": "Order saved.",
+      "dragHandle": "Reorder {title}",
+      "removeLink": "Remove {title} from this collection",
+      "linkRemoved": "Removed from the collection."
+    },
+    "addTo": {
+      "title": "Add to collection",
+      "description": "{count, plural, one {Choose collections for this link.} other {Choose collections for # links.}}",
+      "none": "You don't have collections yet — create one below.",
+      "newPlaceholder": "New collection name",
+      "create": "Create",
+      "save": "Add",
+      "added": "{count, plural, =0 {Already in the selected collections.} one {Added to # collection.} other {Added # times.}}"
+    },
+    "addLinks": {
+      "title": "Add links",
+      "description": "Pick saved links to add to this collection.",
+      "search": "Search your library",
+      "none": "No links to add.",
+      "submit": "{count, plural, =0 {Add} other {Add #}}",
+      "added": "{count, plural, =0 {Nothing new was added.} one {# link added.} other {# links added.}}"
+    }
+  },
+  "sharing": {
+    "visibility": {
+      "title": "Public visibility",
+      "description": "Public links appear on your profile, in Explore and in public search.",
+      "publicLabel": "Make this link public",
+      "publicOn": "Anyone can find and view this link. Your notes stay private.",
+      "publicOff": "Only you and the people you share it with can see this link.",
+      "updated": "Visibility updated."
+    },
+    "private": {
+      "title": "Share privately",
+      "description": "Invite people by e-mail. They get read-only access after signing in with that verified address.",
+      "allowResharing": "Allow resharing",
+      "allowResharingHint": "People you invite can invite others. You can revoke anyone at any time.",
+      "resharingUpdated": "Sharing settings updated."
+    },
+    "invite": {
+      "email": "Recipient e-mail",
+      "placeholder": "name@example.com",
+      "submit": "Invite",
+      "sent": "Invitation sent."
+    },
+    "invitations": {
+      "title": "Invitations",
+      "empty": "No invitations sent yet.",
+      "invitedBy": "Invited by {name}",
+      "expires": "expires {date}",
+      "viaReshare": "via reshare",
+      "status": {
+        "PENDING": "Pending",
+        "ACCEPTED": "Accepted",
+        "REVOKED": "Revoked",
+        "EXPIRED": "Expired"
+      },
+      "revoke": "Revoke",
+      "revokeTitle": "Revoke this invitation?",
+      "revokeBody": "{email} will no longer be able to accept it.",
+      "revoked": "Invitation revoked."
+    },
+    "access": {
+      "title": "People with access",
+      "treeLabel": "Access tree",
+      "viewerCount": "{count, plural, =0 {Nobody else has access.} one {# person has access.} other {# people have access.}}",
+      "emptyOwner": "Nobody else has access yet.",
+      "emptyViewer": "You haven't shared this link with anyone.",
+      "grantedBy": "Shared by {name}",
+      "statusRevoked": "Revoked",
+      "statusInactive": "Inactive",
+      "revoke": "Revoke",
+      "revokeTitle": "Revoke access for {name}?",
+      "revokeBody": "They will immediately lose access to this link.",
+      "revokeCascade": "{count, plural, one {# person who received it through them will also lose access.} other {# people who received it through them will also lose access.}}",
+      "revokeIndependent": "Anyone who also received it through a different person keeps access.",
+      "revoked": "{count, plural, =0 {Access revoked.} one {Access revoked for # person.} other {Access revoked for # people.}}",
+      "showRevoked": "Show revoked ({count})",
+      "hideRevoked": "Hide revoked"
+    },
+    "shared": {
+      "title": "Shared with me",
+      "description": "Links other people shared with you (read-only).",
+      "tabLinks": "Links",
+      "tabInvitations": "Invitations",
+      "emptyTitle": "Nothing shared with you yet",
+      "emptyBody": "When someone shares a link with your e-mail and you accept, it appears here."
+    },
+    "received": {
+      "from": "{name} invited you to a link",
+      "meta": "Sent {date} · expires {expires}",
+      "privacy": "Link details are revealed after you accept.",
+      "accept": "Accept",
+      "accepted": "Invitation accepted.",
+      "emptyTitle": "No pending invitations",
+      "emptyBody": "Invitations sent to your verified e-mail appear here.",
+      "verifyTitle": "Verify your e-mail to see invitations",
+      "verifyBody": "Invitations are matched to your verified address. Use the banner above to resend the verification e-mail."
+    },
+    "accept": {
+      "title": "You've been invited to a link",
+      "guestBody": "Sign in — or create an account — with the e-mail address the invitation was sent to.",
+      "signIn": "Sign in to accept",
+      "createAccount": "Create an account",
+      "sameEmailHint": "Use the same e-mail address that received the invitation, and verify it.",
+      "signedInAs": "Signed in as {email}",
+      "verifyFirst": "Verify your e-mail address before accepting invitations.",
+      "resendVerification": "Resend verification e-mail",
+      "verificationSent": "Verification e-mail sent.",
+      "wrongAccountHint": "Invitations only work for the account with the invited e-mail address.",
+      "readOnlyNote": "You'll get read-only access. The owner can revoke it at any time.",
+      "accept": "Accept invitation",
+      "accepted": "Invitation accepted.",
+      "later": "Not now",
+      "invalidTitle": "Invalid invitation link",
+      "invalidBody": "This link is incomplete. Open it exactly as it appears in the e-mail.",
+      "home": "Go home"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "description": "Sharing, security and processing updates.",
+    "bell": "Notifications",
+    "bellUnread": "{count, plural, one {Notifications, # unread} other {Notifications, # unread}}",
+    "markAllRead": "Mark all as read",
+    "allRead": "All notifications marked as read.",
+    "viewAll": "View all notifications",
+    "empty": "No notifications yet",
+    "noUnread": "You're all caught up",
+    "emptyBody": "We'll let you know about invitations, security warnings and processing problems.",
+    "loadFailed": "Couldn't load notifications.",
+    "all": "All",
+    "unread": "Unread ({count})",
+    "kinds": {
+      "invitationReceived": "{name} shared a link with you",
+      "invitationAccepted": "{name} accepted your invitation",
+      "accessRevoked": "Your access to a shared link was removed",
+      "securityWarning": "A saved link was flagged: {status}",
+      "processingFailed": "We couldn't fetch the details of a saved link",
+      "passwordChanged": "Your password was changed",
+      "generic": "You have a new notification"
+    }
+  },
+  "search": {
+    "title": "Search",
+    "description": "Search your library and links shared with you. Arabic and English are both supported.",
+    "placeholder": "Search by words in titles, descriptions, notes or tags",
+    "links": "Links",
+    "collections": "Collections",
+    "scope": "Scope",
+    "scopes": {
+      "all": "Everything",
+      "own": "My links",
+      "shared": "Shared with me"
+    },
+    "startTitle": "Start typing to search",
+    "startBody": "Enter at least 2 characters.",
+    "noResults": "No results",
+    "noResultsBody": "Try fewer or different words.",
+    "resultCount": "{count, plural, one {# result} other {# results}}",
+    "paletteTitle": "Quick search",
+    "paletteDescription": "Search links and collections, or jump to a page.",
+    "palettePlaceholder": "Search links, collections or pages…",
+    "searching": "Searching…",
+    "seeAll": "See all results for “{q}”",
+    "actions": "Actions",
+    "goTo": "Go to"
+  },
+  "dashboard": {
+    "greetingMorning": "Good morning",
+    "greetingAfternoon": "Good afternoon",
+    "greetingEvening": "Good evening",
+    "statsTitle": "Statistics",
+    "stats": {
+      "links": "Saved links",
+      "favorites": "Favorites",
+      "public": "Public links",
+      "collections": "Collections",
+      "shared": "Shared with me",
+      "unread": "Unread"
+    },
+    "quick": {
+      "addLink": "Add link",
+      "search": "Search",
+      "newCollection": "New collection"
+    },
+    "invitationsTitle": "{count, plural, one {You have # pending invitation} other {You have # pending invitations}}",
+    "invitationsBody": "Accept to add the shared links to your view.",
+    "review": "Review",
+    "recentTitle": "Recently saved",
+    "viewAll": "View all",
+    "emptyTitle": "Nothing saved yet",
+    "emptyBody": "Paste your first link — we'll check it and fetch its details.",
+    "processingTitle": "Processing",
+    "processingBody": "Recent links still being checked, or that need attention.",
+    "processingIdle": "All recent links are processed.",
+    "tipsTitle": "Tips",
+    "tips": {
+      "search": "Press Ctrl K (⌘K on Mac) anywhere to search.",
+      "security": "Only links with no threats found can be published or shared.",
+      "collections": "Public collections show only the public links inside them."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Your profile, account security and preferences.",
+    "tabs": {
+      "profile": "Profile",
+      "account": "Account",
+      "security": "Security",
+      "preferences": "Preferences"
+    },
+    "profile": {
+      "title": "Profile",
+      "description": "How you appear on public pages.",
+      "uploadAvatar": "Upload photo",
+      "removeAvatar": "Remove",
+      "avatarType": "Use a JPEG, PNG, WebP or GIF image.",
+      "avatarSize": "The image must be 2 MB or smaller.",
+      "avatarUpdated": "Photo updated.",
+      "avatarRemoved": "Photo removed.",
+      "name": "Name",
+      "username": "Username",
+      "usernameHint": "Lowercase letters, numbers and underscores. Changing it changes your profile address.",
+      "bio": "Bio",
+      "publicProfile": "Public profile",
+      "publicProfileHint": "When on, your name and public links are visible on your profile page.",
+      "viewProfile": "View profile",
+      "save": "Save profile",
+      "saved": "Profile updated."
+    },
+    "email": {
+      "title": "E-mail address",
+      "description": "Used to sign in and to receive invitations. Changing it requires your password.",
+      "verified": "Verified",
+      "unverified": "Not verified",
+      "email": "E-mail",
+      "currentPassword": "Current password",
+      "save": "Update e-mail",
+      "saved": "E-mail updated.",
+      "savedVerify": "E-mail updated. Check your inbox to verify the new address."
+    },
+    "password": {
+      "title": "Password",
+      "description": "Changing your password signs out your other sessions.",
+      "current": "Current password",
+      "new": "New password",
+      "confirm": "Confirm new password",
+      "hint": "At least 10 characters, with letters and numbers.",
+      "save": "Change password",
+      "saved": "Password updated."
+    },
+    "sessions": {
+      "title": "Active sessions",
+      "description": "Browsers currently signed in to your account.",
+      "current": "This device",
+      "revoke": "Sign out",
+      "revoked": "Session revoked.",
+      "revokeOthers": "Sign out other sessions",
+      "revokeOthersTitle": "Sign out everywhere else?",
+      "revokeOthersBody": "All other browsers and API tokens will be signed out. Enter your password to confirm.",
+      "password": "Password",
+      "unsupported": "Session listing isn't available on this server."
+    },
+    "tokens": {
+      "title": "API tokens",
+      "description": "Tokens used by scripts or apps. This website itself doesn't use tokens.",
+      "empty": "No API tokens.",
+      "lastUsed": "Last used {when}",
+      "never": "never",
+      "expires": "expires {date}",
+      "revoke": "Revoke",
+      "revoked": "Token revoked."
+    },
+    "preferences": {
+      "title": "Preferences",
+      "description": "Saved to your account and used for e-mails too.",
+      "language": "Language",
+      "languageHint": "Saved language: {saved}",
+      "theme": "Appearance",
+      "saved": "Preferences saved."
+    },
+    "delete": {
+      "title": "Delete account",
+      "description": "Permanently delete your account, links, collections and sharing. This can't be undone.",
+      "button": "Delete my account",
+      "confirmTitle": "Delete your account?",
+      "confirmBody": "Everything you saved and shared will be removed.",
+      "password": "Password",
+      "typeDelete": "Type <code>DELETE</code> to confirm",
+      "confirm": "Delete permanently",
+      "done": "Your account has been deleted."
+    }
+  },
+  "admin": {
+    "title": "Administration",
+    "description": "Security reviews, categories and the audit trail.",
+    "forbiddenTitle": "Administrators only",
+    "forbiddenBody": "Your account doesn't have access to this area.",
+    "tabs": {
+      "appeals": "Review requests",
+      "categories": "Categories",
+      "audit": "Audit log"
+    },
+    "appeals": {
+      "status": "Status",
+      "statuses": {
+        "PENDING": "Pending",
+        "APPROVED": "Approved",
+        "REJECTED": "Rejected"
+      },
+      "empty": "No review requests.",
+      "by": "Requested by @{username}",
+      "review": "Review",
+      "resolveTitle": "Resolve review request",
+      "decision": "Decision",
+      "approve": "Approve — change the verdict",
+      "reject": "Reject — keep the verdict",
+      "verdict": "New verdict",
+      "notes": "Notes for the requester",
+      "submit": "Resolve",
+      "resolved": "Review request resolved."
+    },
+    "categories": {
+      "slug": "Slug",
+      "nameAr": "Arabic name",
+      "nameEn": "English name",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "activate": "Activate",
+      "deactivate": "Deactivate",
+      "create": "Add category",
+      "created": "Category created."
+    },
+    "audit": {
+      "filterAction": "Filter by action (exact)",
+      "empty": "No audit entries.",
+      "when": "When",
+      "action": "Action",
+      "actor": "Actor",
+      "target": "Target"
+    }
+  },
+  "explore": {
+    "metaTitle": "Explore public links",
+    "metaDescription": "Browse links people chose to share publicly, by category, tag, type and language.",
+    "title": "Explore",
+    "description": "Links people chose to publish. Every one passed a security check before going public.",
+    "searchPlaceholder": "Search public links in Arabic or English",
+    "search": "Search",
+    "type": "Content type",
+    "anyType": "Any type",
+    "language": "Language",
+    "anyLanguage": "Any language",
+    "sort": "Sort",
+    "sorts": {
+      "latest": "Newest",
+      "popular": "Most viewed",
+      "relevance": "Best match"
+    },
+    "categories": "Categories",
+    "allCategories": "All",
+    "clear": "Clear",
+    "count": "{count, plural, one {# public link} other {# public links}}",
+    "emptyTitle": "Nothing published here yet",
+    "emptyBody": "Public links will appear here as people publish them.",
+    "noResults": "No public links match",
+    "noResultsBody": "Try different words or remove a filter."
+  },
+  "linkPage": {
+    "unavailableTitle": "This link isn't available",
+    "unavailableBody": "It may be private, removed, or not shared with you. If it was shared with you, sign in with the invited e-mail.",
+    "signIn": "Sign in",
+    "explore": "Explore public links",
+    "backExplore": "Explore",
+    "backLibrary": "My library",
+    "backShared": "Shared with me",
+    "ownerTitle": "This is your link",
+    "ownerPublic": "It's public: this is how others see it.",
+    "ownerPrivate": "It's private: only you and people you invited can see it.",
+    "manage": "Manage link",
+    "sharedBy": "Shared with you by {name}",
+    "sharedWithYou": "Shared with you",
+    "readOnly": "You have read-only access.",
+    "visit": "Visit site",
+    "savedBy": "Saved by",
+    "author": "Author",
+    "publishedAtSource": "Published",
+    "sharedOn": "Shared",
+    "language": "Language",
+    "reshareTitle": "Share with others",
+    "reshareBody": "The owner allows resharing. People you invite get read-only access.",
+    "reshareBlocked": "Sharing is unavailable until the link passes the security check."
+  },
+  "publicCollection": {
+    "eyebrow": "Public collection",
+    "by": "Curated by {name}",
+    "emptyTitle": "No public links here yet",
+    "emptyBody": "Only links that are public appear in a public collection.",
+    "unavailableTitle": "Collection not available",
+    "unavailableBody": "It may be private or no longer exist."
+  },
+  "profilePage": {
+    "metaTitle": "{name} (@{username})",
+    "links": "{count, plural, =0 {No public links} one {# public link} other {{formatted} public links}}",
+    "collections": "{count, plural, =0 {No public collections} one {# public collection} other {{formatted} public collections}}",
+    "joined": "Joined {date}",
+    "tabsLabel": "Profile sections",
+    "tabLinks": "Links",
+    "tabCollections": "Collections",
+    "noLinks": "No public links yet.",
+    "noCollections": "No public collections yet.",
+    "unavailableTitle": "Profile not available",
+    "unavailableBody": "This profile is private or doesn't exist."
+  },
+  "contact": {
+    "title": "Contact",
+    "intro": "Questions, feedback or a problem with a link? Here's how to reach us.",
+    "emailTitle": "E-mail",
+    "emailBody": "We read every message.",
+    "emailUnset": "A contact address hasn't been configured for this deployment yet.",
+    "securityTitle": "Report a dangerous link",
+    "securityBody": "If a public link looks harmful, open it in your library and request a review from its Security tab, or contact us with the page address.",
+    "helpTitle": "Help",
+    "helpBody": "Most answers are in the FAQ and the privacy policy.",
+    "faq": "Read the FAQ",
+    "privacy": "Privacy policy"
+  },
+  "landing": {
+    "hero": {
+      "eyebrow": "Every link security-checked before it's shared",
+      "title": "A calm, searchable home for everything worth keeping.",
+      "subtitle": "Save any link in a second. It gets checked, described and organized for you — then find it again in Arabic or English, keep it private, or share it on your terms.",
+      "primary": "Start your library",
+      "secondary": "Explore public links",
+      "points": {
+        "private": "Private by default",
+        "checked": "Security-checked links",
+        "bilingual": "Arabic & English"
+      }
+    },
+    "value": {
+      "title": "Bookmarks were never meant to be a junk drawer.",
+      "body": "Tabs, chats and notes scatter the things you mean to read, cite or share. LinkLibrary keeps them in one place with the context you need: what the page is, why you saved it, and who you shared it with."
+    },
+    "features": {
+      "eyebrow": "Features",
+      "title": "Everything a link library should do — and nothing it shouldn't",
+      "items": {
+        "save": {
+          "title": "Save from anywhere",
+          "body": "Paste a URL and it's saved instantly. Titles, descriptions, images and type are fetched in the background."
+        },
+        "ai": {
+          "title": "Optional AI suggestions",
+          "body": "Short summaries, tags and a category, clearly labelled. Your own edits always win."
+        },
+        "organize": {
+          "title": "Collections & tags",
+          "body": "Group links by project or topic, reorder them, and publish a curated collection when you're ready."
+        },
+        "search": {
+          "title": "Search that understands Arabic",
+          "body": "Full-text search across titles, descriptions, notes and tags — with diacritics and letter variants handled."
+        },
+        "share": {
+          "title": "Private sharing that stays in your control",
+          "body": "Invite people by verified e-mail, allow or forbid resharing, and revoke access — including everyone downstream."
+        },
+        "bilingual": {
+          "title": "Built for two languages",
+          "body": "A full right-to-left Arabic interface and an English one, switchable at any time."
+        }
+      }
+    },
+    "how": {
+      "eyebrow": "How it works",
+      "title": "Three steps, no busywork",
+      "steps": {
+        "save": {
+          "title": "Save",
+          "body": "Add a link. It's stored privately right away — nothing becomes public without your action."
+        },
+        "enrich": {
+          "title": "Check & enrich",
+          "body": "The destination is security-checked, its details are fetched, and optional AI suggestions are prepared."
+        },
+        "use": {
+          "title": "Find, organize, share",
+          "body": "Search, file into collections, publish to your profile, or invite specific people."
+        }
+      }
+    },
+    "security": {
+      "eyebrow": "Security & privacy",
+      "title": "Private first. Checked before anything is shared.",
+      "body": "Your library is private by default. Sharing and publishing are only possible for links that a reputation check found no threats in — and you can see exactly why when something is restricted.",
+      "points": {
+        "private": "New links are always private. Notes are never visible to anyone but you.",
+        "scan": "Destinations are checked against threat-intelligence providers and re-checked periodically.",
+        "publish": "Only links with no threats found can be made public or appear in Explore.",
+        "share": "Private sharing requires a verified e-mail on both sides, and access can be revoked at any time.",
+        "noTrack": "Unauthorized requests for private items get the same answer as items that don't exist."
+      },
+      "disclaimer": "Security checks reduce risk but can't guarantee that a website is safe.",
+      "ladderTitle": "What the security labels mean",
+      "ladderBody": "Every saved link carries one of these statuses.",
+      "statuses": {
+        "PENDING": {
+          "label": "Checking",
+          "body": "The check is running. Publishing and sharing wait for it."
+        },
+        "UNKNOWN": {
+          "label": "Not verified",
+          "body": "No provider could vouch for it. You can open it with a warning, but not share it."
+        },
+        "CLEAR": {
+          "label": "No threats found",
+          "body": "Can be published and shared. Never a guarantee of safety."
+        },
+        "SUSPICIOUS": {
+          "label": "Suspicious",
+          "body": "Warning signs found. Not shareable; you can request a review."
+        },
+        "MALICIOUS": {
+          "label": "Dangerous",
+          "body": "Known threat. It can't be opened, published or shared."
+        }
+      }
+    },
+    "ai": {
+      "title": "AI that helps you organize — and stays in its lane",
+      "body": "When enabled on the server, AI reads only public information from the saved page to suggest a summary, tags and a category. It never sees your notes or account details, and it never runs in your browser.",
+      "points": {
+        "summaries": "Short and detailed summaries of the page",
+        "tags": "Suggested tags you can accept or remove",
+        "categories": "A suggested category from the shared catalogue",
+        "control": "Your manual title, description and category always take priority",
+        "optional": "Everything works without AI — it's an enhancement, not a requirement"
+      }
+    },
+    "discovery": {
+      "eyebrow": "Public discovery",
+      "title": "Find what others found worth sharing",
+      "body": "Publish a link or a collection and it appears on your profile and in Explore, searchable by category, tag, type and language.",
+      "cta": "Explore",
+      "empty": "No public links have been published yet. Yours could be the first."
+    },
+    "faq": {
+      "title": "Questions",
+      "body": "Straight answers about privacy, security and sharing.",
+      "items": {
+        "private": {
+          "q": "Who can see the links I save?",
+          "a": "Only you, until you decide otherwise. You can publish a link (it appears on your profile and in Explore) or invite specific people by e-mail. Your notes are never shown to anyone else."
+        },
+        "safe": {
+          "q": "Does “No threats found” mean a site is safe?",
+          "a": "No. It means the reputation providers didn't know of a threat when the link was checked. It lowers risk but can't guarantee safety, which is why we never label a link “safe”."
+        },
+        "ai": {
+          "q": "What does the AI see?",
+          "a": "Only publicly available information from the saved page, such as its title, description and a text excerpt. Private notes, custom edits and account data are never sent. AI can be disabled entirely on the server."
+        },
+        "share": {
+          "q": "How does private sharing work?",
+          "a": "You invite an e-mail address. The recipient signs in with that verified address and accepts. They get read-only access, and you can revoke it — revoking also removes access for anyone they reshared with."
+        },
+        "public": {
+          "q": "Why can't I publish some links?",
+          "a": "Only links whose security check found no threats can be published or shared. Links that are still being checked, couldn't be verified, or were flagged stay private. You can rescan or request a review."
+        },
+        "arabic": {
+          "q": "Does search work in Arabic?",
+          "a": "Yes. Search handles Arabic letter variants and diacritics, and English word forms, across titles, descriptions, tags and your notes."
+        }
+      }
+    },
+    "cta": {
+      "title": "Start building a library you'll actually use",
+      "body": "Free to start. Private by default.",
+      "primary": "Create your account",
+      "secondary": "Sign in"
+    }
+  },
+  "about": {
+    "title": "About LinkLibrary",
+    "intro": "A bilingual link library for people who collect, research and share what they find on the web.",
+    "sections": [
+      {
+        "heading": "Why we built it",
+        "body": [
+          "Valuable links get lost in browser tabs, chat threads and notes apps. LinkLibrary gives them a single, organized home with the context you need to use them later.",
+          "It was designed for Arabic and English from the start: a full right-to-left interface, and search that understands Arabic text."
+        ]
+      },
+      {
+        "heading": "What it does",
+        "body": [
+          "Save links privately, let their details be fetched automatically, organize them into collections with tags and categories, and search everything you've saved.",
+          "When you're ready, publish individual links or curated collections, or share privately with specific people."
+        ]
+      },
+      {
+        "heading": "How we approach safety",
+        "body": [
+          "Every destination is checked against threat-intelligence providers before it can be published or shared, and re-checked over time. We are careful with wording: a link with no known threats is shown as “No threats found”, never as “safe”."
+        ]
+      }
+    ]
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "intro": "How LinkLibrary handles your information, described as the product works today.",
+    "sections": [
+      {
+        "heading": "Information you provide",
+        "body": [
+          "Account details: name, username, e-mail address, password (stored hashed), and optionally a bio and profile photo.",
+          "Content: the links you save, plus any custom titles, descriptions, tags, categories, notes and collections you create, and the e-mail addresses you invite."
+        ]
+      },
+      {
+        "heading": "Information processed automatically",
+        "body": [
+          "When you save a link, our servers fetch the page to read publicly available metadata (such as title, description and image) and check the destination with threat-intelligence providers.",
+          "We keep session and security records needed to run the service, such as active sessions and an audit log of security-relevant actions."
+        ]
+      },
+      {
+        "heading": "Optional AI processing",
+        "body": [
+          "If AI enrichment is enabled, publicly available information from saved pages (for example the title, description and an excerpt of the text) may be sent to a third-party AI provider to suggest summaries, categories and tags.",
+          "Your private notes, custom edits, invitations and account details are never sent to an AI provider."
+        ]
+      },
+      {
+        "heading": "Visibility and sharing",
+        "body": [
+          "Links are private by default. A link becomes visible to others only if you publish it or invite specific people. Notes are never shown to anyone else.",
+          "Your profile is shown publicly only if you enable the public profile setting."
+        ]
+      },
+      {
+        "heading": "Your choices",
+        "body": [
+          "You can edit or delete links and collections, revoke sharing, sign out other sessions, change your e-mail and password, and delete your account from Settings."
+        ]
+      },
+      {
+        "heading": "Cookies",
+        "body": [
+          "The website uses cookies required for signing in and protecting forms (a session cookie and a CSRF-protection cookie), and remembers your language choice. Your theme and layout preferences may be stored in your browser."
+        ]
+      },
+      {
+        "heading": "Contact",
+        "body": ["Questions about privacy can be sent through the contact page."]
+      }
+    ]
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "intro": "The ground rules for using LinkLibrary, described in plain language.",
+    "sections": [
+      {
+        "heading": "Your account",
+        "body": ["Keep your password secure and your e-mail address up to date. You are responsible for activity on your account."]
+      },
+      {
+        "heading": "Your content",
+        "body": [
+          "You keep ownership of what you save and write. By publishing a link or collection, you choose to make it visible to others through the service."
+        ]
+      },
+      {
+        "heading": "Acceptable use",
+        "body": [
+          "Don't use the service to distribute malware, phishing or other harmful destinations, to harass people, or to share content you don't have the right to share.",
+          "Links flagged by security checks may be restricted, and accounts may be suspended for abuse."
+        ]
+      },
+      {
+        "heading": "Security checks",
+        "body": ["Security checks reduce risk but cannot guarantee that a website is safe. Use your own judgement before visiting any destination."]
+      },
+      {
+        "heading": "Availability",
+        "body": ["Features such as AI suggestions depend on server configuration and third-party providers and may be unavailable at times."]
+      },
+      {
+        "heading": "Changes",
+        "body": ["These terms may change as the product evolves. Significant changes will be communicated through the service."]
+      }
+    ]
+  }
+}
