@@ -1,0 +1,101 @@
+name: Deploy Web
+# DISABLED BY DEFAULT: the deploy job runs only when the repository variable DEPLOY_ENABLED is exactly 'true'.
+# Tests always run on main; nothing is uploaded to the server until the switch is turned on (see docs/CICD.md).
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      action:
+        description: deploy (HEAD of main, tests re-run) or rollback
+        type: choice
+        options: [deploy, rollback]
+        default: deploy
+      release_id:
+        description: "rollback only: release directory name (empty = previous release)"
+        required: false
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: linklibrary-production     # per repo; the server also holds a flock so api and web releases never overlap
+  cancel-in-progress: false
+jobs:
+  test:
+    if: ${{ github.event_name == 'push' || inputs.action == 'deploy' }}
+    uses: ./.github/workflows/_test.yml
+
+  deploy:
+    needs: test
+    if: ${{ vars.DEPLOY_ENABLED == 'true' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+        with: { persist-credentials: false }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm }
+      - name: Build release (public URLs come from repository variables, never secrets)
+        env:
+          NEXT_PUBLIC_API_URL: ${{ vars.LL_PUBLIC_ORIGIN }}
+          NEXT_PUBLIC_SITE_URL: ${{ vars.LL_PUBLIC_ORIGIN }}
+          NEXT_PUBLIC_CONTACT_EMAIL: ${{ vars.LL_CONTACT_EMAIL }}
+          NEXT_TELEMETRY_DISABLED: '1'
+          NODE_OPTIONS: --max-old-space-size=4096
+        run: |
+          test -n "$NEXT_PUBLIC_API_URL" || { echo "set repository variable LL_PUBLIC_ORIGIN"; exit 1; }
+          case "$NEXT_PUBLIC_API_URL" in https://*) ;; *) echo "LL_PUBLIC_ORIGIN must be https"; exit 1;; esac
+          npm ci --include=dev --no-fund
+          npm run build
+          # next.config.ts needs typescript at start, so node_modules is shipped as built (same linux-x64 / Node 22 as the VPS)
+          tar --hard-dereference --owner=0 --group=0 --numeric-owner -czf release.tgz --exclude=./.git --exclude=./.github --exclude=./e2e --exclude=./tests \
+              --exclude=./docs --exclude='./.env*' --exclude=./release.tgz .
+          sha256sum release.tgz | cut -d' ' -f1 > release.sha256
+          # the server keeps uploads below 400 MB
+          test "$(stat -c %s release.tgz)" -le 419430400 || { echo "release too large"; exit 1; }
+      - name: Prepare SSH (dedicated restricted key, pinned host key)
+        env:
+          KEY: ${{ secrets.LL_SSH_PRIVATE_KEY }}
+          KNOWN: ${{ secrets.LL_SSH_KNOWN_HOSTS }}
+        run: |
+          test -n "$KEY" && test -n "$KNOWN" || { echo "missing SSH secrets"; exit 1; }
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/ll_deploy && chmod 600 ~/.ssh/ll_deploy
+          printf '%s\n' "$KNOWN" > ~/.ssh/known_hosts
+      - name: Upload, promote, smoke-test (server rolls back automatically if smoke fails)
+        env:
+          HOST: ${{ vars.LL_SSH_HOST }}
+          PORT: ${{ vars.LL_SSH_PORT || '22' }}
+          SSH_USER: ${{ vars.LL_SSH_USER || 'llci' }}
+        run: |
+          [[ "$HOST" =~ ^[A-Za-z0-9.-]{1,253}$ && "$PORT" =~ ^[0-9]{1,5}$ && "$SSH_USER" =~ ^[a-z_][a-z0-9_-]{0,31}$ ]] || { echo "invalid SSH variables"; exit 1; }
+          SSH="ssh -i $HOME/.ssh/ll_deploy -p $PORT -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o BatchMode=yes $SSH_USER@$HOST"
+          $SSH "upload web $GITHUB_SHA $(cat release.sha256)" < release.tgz
+          $SSH "deploy web $GITHUB_SHA $(cat release.sha256)"
+      - name: Cleanup key
+        if: always()
+        run: rm -f ~/.ssh/ll_deploy
+
+  rollback:
+    if: ${{ inputs.action == 'rollback' && vars.DEPLOY_ENABLED == 'true' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment: production
+    steps:
+      - name: Roll back (symlink switch only)
+        env:
+          KEY: ${{ secrets.LL_SSH_PRIVATE_KEY }}
+          KNOWN: ${{ secrets.LL_SSH_KNOWN_HOSTS }}
+          HOST: ${{ vars.LL_SSH_HOST }}
+          PORT: ${{ vars.LL_SSH_PORT || '22' }}
+          SSH_USER: ${{ vars.LL_SSH_USER || 'llci' }}
+          RID: ${{ inputs.release_id }}
+        run: |
+          [[ "$HOST" =~ ^[A-Za-z0-9.-]{1,253}$ && "$PORT" =~ ^[0-9]{1,5}$ && "$SSH_USER" =~ ^[a-z_][a-z0-9_-]{0,31}$ ]] || { echo "invalid SSH variables"; exit 1; }
+          [[ -z "$RID" || "$RID" =~ ^[0-9A-Za-z._-]{3,80}$ ]] || { echo "bad release id"; exit 1; }
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/ll_deploy && chmod 600 ~/.ssh/ll_deploy
+          printf '%s\n' "$KNOWN" > ~/.ssh/known_hosts
+          ssh -i ~/.ssh/ll_deploy -p "$PORT" -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o BatchMode=yes "$SSH_USER@$HOST" "rollback $RID"
+          rm -f ~/.ssh/ll_deploy
