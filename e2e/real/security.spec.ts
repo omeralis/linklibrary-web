@@ -124,7 +124,7 @@ test.describe.serial('real API — security statuses (strict policy)', () => {
     await page.getByRole('tab', { name: 'Sharing' }).click();
     await expect(page.getByRole('switch', { name: 'Make this link public' })).toBeDisabled();
     await expect(page.getByPlaceholder('name@example.com')).toBeDisabled();
-    await expect(page.getByText(/couldn't be verified/).first()).toBeVisible();
+    await expect(page.getByText(/can't be published or shared yet/).first()).toBeVisible();
   });
 
   test('UI: SUSPICIOUS shows the verdict, blocks publishing and accepts a review request', async () => {

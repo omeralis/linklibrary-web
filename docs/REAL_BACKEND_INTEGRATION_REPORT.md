@@ -83,7 +83,11 @@ All tests use disposable users (`…@e2e.example.com`) and delete them; a global
 
 ## 7. GitHub status
 
-See the final summary: this session cannot create repositories under `omeralis` and the owner's machine has no GitHub credentials. Nothing has been pushed; local commits only. Commands to publish are in `IMPLEMENTATION_PROGRESS.md` §7.
+The owner pushed the first version from their machine (`omeralis/linklibrary-web`, `omeralis/linklibrary-api`). Later work is prepared as plain commits on top of the owner's history (no amend, rebase or force-push). Pushing from the cloud session is not possible until GitHub is linked to the session; see the final summary of the session for the exact state.
+
+## 7b. Temporary policy (2026-11-03): security scanning "Coming Soon" + unverified sharing
+
+Flags `SECURITY_SCANNING_COMING_SOON` and `SECURITY_ALLOW_UNVERIFIED_SHARING` (backend). Real-backend results (isolated DB, Chromium): with both on, `policy.spec` (6 tests) and the rest of the real suite pass (39 passed, 0 failed in the last full run); with both off the strict `security.spec` (8 tests) passes, proving the policy is reversible. UNKNOWN is never promoted to CLEAR; PENDING/SUSPICIOUS/MALICIOUS stay blocked; manual rescan is refused with `422 SECURITY_SCANNING_COMING_SOON`.
 
 ## 8. Reproduce
 

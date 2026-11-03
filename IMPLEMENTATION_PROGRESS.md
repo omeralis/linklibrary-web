@@ -131,3 +131,4 @@ results: `docs/REAL_BACKEND_INTEGRATION_REPORT.md`.
 | 2026-11-01 → 02 | Inspected backend handoff, OpenAPI, routes, resources and `.env`; built the complete frontend; 80 unit/component + 22 E2E tests passing; docs written; delivered to `E:\Dev\linklibrary-web`; GitHub push pending authorization. |
 
 - 2026-11-03: AI panel shows a friendly bilingual notice when the free AI quota is exhausted (`processing.ai_wait`); API types regenerated; 1084 i18n keys per locale; checks and 81 unit tests pass.
+- 2026-11-03: Security scanning shows "الفحص الأمني — قريبًا" / "Security Scanning — Coming Soon" (rescan disabled); UNKNOWN links can be published/shared with a visible "not security-verified" warning when the backend flag is on; new real-backend `policy.spec`; strict mode re-verified. 86 unit tests pass.
