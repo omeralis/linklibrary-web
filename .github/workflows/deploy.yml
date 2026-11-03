@@ -50,7 +50,7 @@ jobs:
           npm run build
           # next.config.ts needs typescript at start, so node_modules is shipped as built (same linux-x64 / Node 22 as the VPS)
           tar --hard-dereference --owner=0 --group=0 --numeric-owner -czf release.tgz --exclude=./.git --exclude=./.github --exclude=./e2e --exclude=./tests \
-              --exclude=./docs --exclude='./.env*' --exclude=./release.tgz .
+              --exclude=./docs --exclude=./.next/cache --exclude='./.env*' --exclude=./release.tgz .
           sha256sum release.tgz | cut -d' ' -f1 > release.sha256
           # the server keeps uploads below 400 MB
           test "$(stat -c %s release.tgz)" -le 419430400 || { echo "release too large"; exit 1; }
