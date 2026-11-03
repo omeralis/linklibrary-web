@@ -65,7 +65,9 @@ export function LinkOverview({ link }: { link: OwnedLink }) {
           </CardHeader>
           <CardContent>
             {link.description ? (
-              <p className="leading-relaxed text-pretty"><bdi>{link.description}</bdi></p>
+              <p className="leading-relaxed text-pretty">
+                <bdi>{link.description}</bdi>
+              </p>
             ) : (
               <p className="text-sm text-muted-foreground">{t('noDescription')}</p>
             )}
@@ -77,7 +79,13 @@ export function LinkOverview({ link }: { link: OwnedLink }) {
             <CardTitle className="text-base">{t('notes')}</CardTitle>
           </CardHeader>
           <CardContent>
-            {link.notes ? <p className="text-sm whitespace-pre-line"><bdi>{link.notes}</bdi></p> : <p className="text-sm text-muted-foreground">{t('noNotes')}</p>}
+            {link.notes ? (
+              <p className="text-sm whitespace-pre-line">
+                <bdi>{link.notes}</bdi>
+              </p>
+            ) : (
+              <p className="text-sm text-muted-foreground">{t('noNotes')}</p>
+            )}
           </CardContent>
         </Card>
       </div>

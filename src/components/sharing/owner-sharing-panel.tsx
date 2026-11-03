@@ -37,8 +37,17 @@ export function OwnerSharingPanel({ link, user }: { link: OwnedLink; user: User 
   // When publishing and sharing are blocked for the same reason, explain it once above both sections.
   const sharedReason = !isPublic && publishBlocked && publishBlocked === shareBlocked ? publishBlocked : null;
 
+  // Temporary policy: UNKNOWN links may circulate, but everyone is told they were not security-verified.
+  const unverifiedNotice = !link.security.verified && link.security.status === 'UNKNOWN' && (link.permissions.can_publish || link.permissions.can_share);
+
   return (
     <div className="grid gap-6">
+      {unverifiedNotice && (
+        <Alert variant="warning" data-testid="unverified-sharing-warning">
+          <ShieldAlert aria-hidden />
+          <AlertDescription>{t('unverifiedWarning')}</AlertDescription>
+        </Alert>
+      )}
       {sharedReason && (
         <Alert variant="warning" data-testid="sharing-restriction">
           <ShieldAlert aria-hidden />

@@ -2956,6 +2956,51 @@ export type paths = {
     patch?: never;
     trace?: never;
   };
+  '/public/features': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Feature flags (temporary security-scanning and sharing policy) */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['Envelope'] & {
+              data?: {
+                /** @enum {string} */
+                security_scanning?: 'COMING_SOON' | 'AVAILABLE';
+                unverified_sharing?: boolean;
+              };
+            };
+          };
+        };
+        404: components['responses']['NotFound'];
+        422: components['responses']['ValidationError'];
+        429: components['responses']['RateLimited'];
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/public/categories': {
     parameters: {
       query?: never;
@@ -3844,6 +3889,12 @@ export type components = {
         warning?: string | null;
         /** Format: date-time */
         checked_at?: string | null;
+        /** @description true only for an unexpired CLEAR verdict */
+        verified?: boolean;
+        /** @description Whether this link may be shared under the current security policy */
+        can_share?: boolean;
+        /** @enum {string} */
+        scanning?: 'COMING_SOON' | 'AVAILABLE';
       };
       owner?: components['schemas']['PublicUserSummary'] | null;
       /** Format: date-time */
@@ -3977,6 +4028,10 @@ export type components = {
       can_publish?: boolean;
       can_share?: boolean;
       can_open?: boolean;
+      /** @enum {string} */
+      scanning?: 'COMING_SOON' | 'AVAILABLE';
+      /** @description true when the link circulates only because of the temporary unverified-sharing policy */
+      unverified_sharing?: boolean;
       disclaimer?: string;
       history?: components['schemas']['SecurityScan'][];
       appeals?: components['schemas']['Appeal'][];

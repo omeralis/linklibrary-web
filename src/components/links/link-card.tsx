@@ -158,7 +158,11 @@ export function LinkCard({
             <bdi>{link.title}</bdi>
           </Link>
         </h3>
-        {link.description && <p className="line-clamp-2 text-sm text-muted-foreground"><bdi>{link.description}</bdi></p>}
+        {link.description && (
+          <p className="line-clamp-2 text-sm text-muted-foreground">
+            <bdi>{link.description}</bdi>
+          </p>
+        )}
         <div className="mt-auto flex items-end justify-between gap-2 pt-1">
           <div className="relative z-10 min-w-0">
             <StatusRow link={link} />

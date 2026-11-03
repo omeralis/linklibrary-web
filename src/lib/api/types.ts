@@ -143,6 +143,11 @@ export interface LinkSecurity {
   /** Translation key such as "security.unknown", or null when no warning is required. */
   warning: string | null;
   checked_at: string | null;
+  /** true only for an unexpired CLEAR verdict; otherwise the UI must say "not security-verified". */
+  verified?: boolean;
+  /** Whether the viewer may share this link under the current policy. */
+  can_share?: boolean;
+  scanning?: 'COMING_SOON' | 'AVAILABLE';
 }
 
 export interface LinkAi {
@@ -296,6 +301,8 @@ export interface SecurityDetails {
   can_publish: boolean;
   can_share: boolean;
   can_open: boolean;
+  scanning?: 'COMING_SOON' | 'AVAILABLE';
+  unverified_sharing?: boolean;
   disclaimer: string;
   history: SecurityScan[];
   appeals: Appeal[];

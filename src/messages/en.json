@@ -248,14 +248,14 @@
     "explain": {
       "PENDING": "The security check is still running. Publishing and sharing unlock once it finishes.",
       "CLEAR": "The reputation providers found no known threats. This lowers risk but doesn't guarantee the site is safe.",
-      "UNKNOWN": "The destination couldn't be verified by a reputation provider, so it can't be published or shared. You can still open it at your own risk.",
+      "UNKNOWN": "This destination has not been security-verified. You can open it at your own risk, and you may publish or share it once its details are ready.",
       "SUSPICIOUS": "The destination shows warning signs. It can't be published or shared, and people you shared it with can't open it.",
       "MALICIOUS": "The destination is known to be dangerous. It can't be opened, published or shared."
     },
     "restrictionReason": {
       "PENDING": "The security check hasn't finished yet. Try again in a moment.",
       "CLEAR": "Publishing and sharing are not available for this link right now.",
-      "UNKNOWN": "Only links with no threats found can be published or shared. This one couldn't be verified — run a rescan later.",
+      "UNKNOWN": "This link can't be published or shared yet: its page details are still being processed or couldn't be read, or sharing of unverified links is turned off.",
       "SUSPICIOUS": "Links flagged as suspicious can't be published or shared. If you think this is a mistake, request a review.",
       "MALICIOUS": "Links flagged as dangerous can't be published, shared or opened. If you think this is a mistake, request a review."
     },
@@ -296,7 +296,13 @@
       "colDate": "Date",
       "colTrigger": "Trigger",
       "colResult": "Result"
-    }
+    },
+    "comingSoon": {
+      "title": "Security Scanning — Coming Soon",
+      "body": "Automatic security scanning is not available yet, so links stay \"Not verified\". Manual scans and re-scans are turned off for now.",
+      "badge": "Coming Soon"
+    },
+    "unverifiedWarning": "This link has not been security-verified. Publish or share it only if you trust the destination."
   },
   "links": {
     "sharedBy": "From {name}",
@@ -319,7 +325,7 @@
     "restrictions": {
       "emailNotVerified": "Verify your e-mail address to publish and share links.",
       "security_PENDING": "The security check is still running. Publishing and sharing unlock when it finishes with no threats found.",
-      "security_UNKNOWN": "This link couldn't be verified by a security provider, so it can't be published or shared. Try a rescan from the Security tab later.",
+      "security_UNKNOWN": "This link can't be published or shared yet: its page details are still being processed or couldn't be read, or sharing of unverified links is turned off.",
       "security_SUSPICIOUS": "This link was flagged as suspicious, so it can't be published or shared. You can request a review from the Security tab.",
       "security_MALICIOUS": "This link was flagged as dangerous, so it can't be published, shared or opened. You can request a review from the Security tab.",
       "security_CLEAR": "This action isn't available for this link right now."
@@ -479,10 +485,11 @@
       "readyNotClearedTitle": "Details are ready — security is a separate check",
       "readyNotCleared": {
         "PENDING": "The security check is still running. Publishing and sharing unlock only if it finds no threats.",
-        "UNKNOWN": "No security provider could verify this destination, so it stays private: it can't be published or shared. Ready only means the page details were fetched.",
+        "UNKNOWN": "This destination has not been security-verified, so it stays private: it can't be published or shared. Ready only means the page details were fetched.",
         "SUSPICIOUS": "The destination was flagged as suspicious, so it can't be published or shared. You can request a review from the Security tab.",
         "MALICIOUS": "The destination was flagged as dangerous. It can't be opened, published or shared.",
-        "CLEAR": "No threats were found."
+        "CLEAR": "No threats were found.",
+        "UNKNOWN_ALLOWED": "This destination has not been security-verified. You can publish or share it, and everyone who sees it is warned. Ready only means the page details were fetched."
       }
     },
     "ai": {
@@ -730,7 +737,8 @@
       "invalidTitle": "Invalid invitation link",
       "invalidBody": "This link is incomplete. Open it exactly as it appears in the e-mail.",
       "home": "Go home"
-    }
+    },
+    "unverifiedWarning": "This link has not been security-verified. Everyone you share it with, or who sees it publicly, will be warned. Publish or share only what you trust."
   },
   "notifications": {
     "title": "Notifications",
@@ -1008,7 +1016,8 @@
     "language": "Language",
     "reshareTitle": "Share with others",
     "reshareBody": "The owner allows resharing. People you invite get read-only access.",
-    "reshareBlocked": "Sharing is unavailable until the link passes the security check."
+    "reshareBlocked": "Sharing is unavailable until the link passes the security check.",
+    "unverifiedNotice": "This link has not been security-verified. Open it only if you trust the person who shared it."
   },
   "publicCollection": {
     "eyebrow": "Public collection",
@@ -1130,7 +1139,7 @@
         },
         "UNKNOWN": {
           "label": "Not verified",
-          "body": "No provider could vouch for it. You can open it with a warning, but not share it."
+          "body": "No provider could vouch for it. You can open it with a warning, and publish or share it once its details are ready (temporary policy)."
         },
         "CLEAR": {
           "label": "No threats found",

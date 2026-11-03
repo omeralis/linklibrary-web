@@ -10,7 +10,9 @@ test('visual review screenshots', async ({ page }) => {
   const api = await seededUser(page, user);
   const dir = 'test-results/real/screenshots';
   try {
-    const real = (await createLink(api, process.env.E2E_SHOTS_URL ?? 'https://pypi.org/project/urllib3/', { tags: ['python', 'http'], notes: 'Use for the API client.' })).public_id;
+    const real = (
+      await createLink(api, process.env.E2E_SHOTS_URL ?? 'https://pypi.org/project/urllib3/', { tags: ['python', 'http'], notes: 'Use for the API client.' })
+    ).public_id;
     const unknown = (await createLink(api, `https://unknown-${runId}.e2e-fixture.example.org/`, { custom_title: 'Team handbook draft' })).public_id;
     await createLink(api, `https://a.b.c.d.e.sus-${runId}.example.org/login`, { custom_title: 'Suspicious login page' });
     await waitProcessed(api, real, 60_000);
@@ -35,7 +37,11 @@ test('visual review screenshots', async ({ page }) => {
       }
     }
     await page.setViewportSize({ width: 412, height: 915 });
-    for (const [name, path] of [['m-library', '/ar/dashboard/links'], ['m-detail', `/ar/dashboard/links/${real}`], ['m-detail-en', `/en/dashboard/links/${real}`]] as const) {
+    for (const [name, path] of [
+      ['m-library', '/ar/dashboard/links'],
+      ['m-detail', `/ar/dashboard/links/${real}`],
+      ['m-detail-en', `/en/dashboard/links/${real}`],
+    ] as const) {
       await page.goto(path);
       await expect(page.locator('[data-slot="skeleton"]')).toHaveCount(0, { timeout: 15_000 });
       await page.waitForTimeout(600);

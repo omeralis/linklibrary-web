@@ -3,6 +3,7 @@ import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SecurityBadge, ProcessingBadge } from '@/components/links/status-badges';
 import { OpenLinkButton } from '@/components/links/open-link-button';
+import { SecurityPanel } from '@/components/links/security-panel';
 import { OwnerSharingPanel } from '@/components/sharing/owner-sharing-panel';
 import { renderWithProviders, jsonResponse } from '../test-utils';
 import { ownedLink, publicLink, user, viewerLink } from '../fixtures';
@@ -39,7 +40,11 @@ describe('OpenLinkButton (safe external navigation)', () => {
     expect(a.getAttribute('rel')).toContain('noreferrer');
   });
   it('is disabled for blocked links (MALICIOUS: can_open=false)', () => {
-    renderWithProviders(<OpenLinkButton link={viewerLink({ open_url: null, security: { status: 'MALICIOUS', can_open: false, warning: 'security.malicious', checked_at: null } })} />);
+    renderWithProviders(
+      <OpenLinkButton
+        link={viewerLink({ open_url: null, security: { status: 'MALICIOUS', can_open: false, warning: 'security.malicious', checked_at: null } })}
+      />,
+    );
     expect(screen.getByRole('button', { name: /blocked/i })).toBeDisabled();
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
   });
@@ -48,7 +53,9 @@ describe('OpenLinkButton (safe external navigation)', () => {
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
   });
   it('shows a warning interstitial and re-checks via GET /links/{id}/open for unverified links', async () => {
-    const fetchMock = vi.fn().mockResolvedValue(jsonResponse({ success: true, message: null, data: { url: 'https://unknown.example/x', security_status: 'UNKNOWN', warning: true } }));
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(jsonResponse({ success: true, message: null, data: { url: 'https://unknown.example/x', security_status: 'UNKNOWN', warning: true } }));
     vi.stubGlobal('fetch', fetchMock);
     const link = ownedLink({ security: { status: 'UNKNOWN', can_open: true, warning: 'security.unknown', checked_at: null } });
     renderWithProviders(<OpenLinkButton link={link} />);
@@ -63,7 +70,12 @@ describe('OpenLinkButton (safe external navigation)', () => {
 
 describe('OwnerSharingPanel respects backend restrictions', () => {
   it('disables publishing and inviting for UNKNOWN links and explains why', () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(jsonResponse({ success: true, message: null, data: [], meta: { pagination: { current_page: 1, per_page: 50, has_more: false } } })));
+    vi.stubGlobal(
+      'fetch',
+      vi
+        .fn()
+        .mockResolvedValue(jsonResponse({ success: true, message: null, data: [], meta: { pagination: { current_page: 1, per_page: 50, has_more: false } } })),
+    );
     const link = ownedLink({
       security: { status: 'UNKNOWN', can_open: true, warning: 'security.unknown', checked_at: null },
       permissions: { can_edit: true, can_delete: true, can_change_visibility: true, can_publish: false, can_share: false, can_reshare: true },
@@ -71,7 +83,31 @@ describe('OwnerSharingPanel respects backend restrictions', () => {
     renderWithProviders(<OwnerSharingPanel link={link} user={user} />);
     expect(screen.getByRole('switch', { name: /make this link public/i })).toBeDisabled();
     expect(screen.getByPlaceholderText('name@example.com')).toBeDisabled();
-    expect(screen.getAllByText(/couldn't be verified/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/can't be published or shared yet/i).length).toBeGreaterThan(0);
+    expect(screen.queryByTestId('unverified-sharing-warning')).not.toBeInTheDocument();
+  });
+  it('temporary policy: UNKNOWN links can be published/shared, with a "not security-verified" warning (never "safe")', () => {
+    vi.stubGlobal(
+      'fetch',
+      vi
+        .fn()
+        .mockResolvedValue(jsonResponse({ success: true, message: null, data: [], meta: { pagination: { current_page: 1, per_page: 50, has_more: false } } })),
+    );
+    const link = ownedLink({
+      security: { status: 'UNKNOWN', can_open: true, warning: 'security.unknown', checked_at: null, verified: false, scanning: 'COMING_SOON' },
+      permissions: { can_edit: true, can_delete: true, can_change_visibility: true, can_publish: true, can_share: true, can_reshare: true },
+    });
+    renderWithProviders(<OwnerSharingPanel link={link} user={user} />);
+    expect(screen.getByRole('switch', { name: /make this link public/i })).toBeEnabled();
+    expect(screen.getByPlaceholderText('name@example.com')).toBeEnabled();
+    expect(screen.getByTestId('unverified-sharing-warning')).toHaveTextContent(/not been security-verified/i);
+    expect(screen.queryByText(/no threats found|\bsafe\b/i)).not.toBeInTheDocument();
+  });
+  it('shows the warning in Arabic too', () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(jsonResponse({ success: true, message: null, data: [] })));
+    const link = ownedLink({ security: { status: 'UNKNOWN', can_open: true, warning: 'security.unknown', checked_at: null, verified: false } });
+    renderWithProviders(<OwnerSharingPanel link={link} user={user} />, { locale: 'ar' });
+    expect(screen.getByTestId('unverified-sharing-warning')).toHaveTextContent('لم يُتحقَّق أمنيًا');
   });
   it('requires a verified e-mail even for CLEAR links', () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(jsonResponse({ success: true, message: null, data: [] })));
@@ -84,5 +120,45 @@ describe('OwnerSharingPanel respects backend restrictions', () => {
     renderWithProviders(<OwnerSharingPanel link={ownedLink()} user={user} />);
     expect(screen.getByRole('switch', { name: /make this link public/i })).toBeEnabled();
     expect(screen.getByPlaceholderText('name@example.com')).toBeEnabled();
+  });
+});
+
+describe('SecurityPanel — scanning is "Coming Soon"', () => {
+  const details = (scanning: 'COMING_SOON' | 'AVAILABLE') => ({
+    status: 'UNKNOWN',
+    stored_status: 'UNKNOWN',
+    source: 'PROVIDER',
+    checked_at: null,
+    expires_at: null,
+    can_publish: true,
+    can_share: true,
+    can_open: true,
+    scanning,
+    unverified_sharing: true,
+    disclaimer: 'Security checks reduce risk.',
+    history: [],
+    appeals: [],
+  });
+  it('shows the English label and disables manual rescan', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(jsonResponse({ success: true, message: null, data: details('COMING_SOON') })));
+    renderWithProviders(<SecurityPanel link={ownedLink()} />);
+    expect(await screen.findByText('Security Scanning — Coming Soon')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /re-?scan|check again/i })).toBeDisabled();
+    expect(screen.getByTestId('unverified-warning')).toBeInTheDocument();
+  });
+  it('shows the Arabic label', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(jsonResponse({ success: true, message: null, data: details('COMING_SOON') })));
+    renderWithProviders(<SecurityPanel link={ownedLink()} />, { locale: 'ar' });
+    expect(await screen.findByText('الفحص الأمني — قريبًا')).toBeInTheDocument();
+  });
+  it('keeps rescan enabled when scanning is available', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(jsonResponse({ success: true, message: null, data: { ...details('AVAILABLE'), unverified_sharing: false } })),
+    );
+    renderWithProviders(<SecurityPanel link={ownedLink()} />);
+    await screen.findByText('Security Scanning', { exact: false }).catch(() => undefined);
+    expect(await screen.findByRole('button', { name: /re-?scan|check again/i })).toBeEnabled();
+    expect(screen.queryByText('Security Scanning — Coming Soon')).not.toBeInTheDocument();
   });
 });

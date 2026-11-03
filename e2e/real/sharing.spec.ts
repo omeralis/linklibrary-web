@@ -37,7 +37,9 @@ test.describe.serial('real API — private sharing', () => {
     [owner, bob, carol, dave, eve] = await Promise.all(['shOwner', 'shBob', 'shCarol', 'shDave', 'shEve'].map((l) => actor(browser, l)));
     const link = await createLink(owner.api, `https://shared-${runId}.e2e-fixture.example.org/guide`, { custom_title: `Shared guide ${runId}`, notes: NOTES });
     linkId = link.public_id;
-    await expect.poll(async () => ((await owner.api.get(`/links/${linkId}`)).body.data as { security: { status: string } }).security.status, { timeout: 30_000 }).not.toBe('PENDING');
+    await expect
+      .poll(async () => ((await owner.api.get(`/links/${linkId}`)).body.data as { security: { status: string } }).security.status, { timeout: 30_000 })
+      .not.toBe('PENDING');
     markClear(linkId);
   });
   test.afterAll(async () => {
@@ -140,7 +142,12 @@ test.describe.serial('real API — private sharing', () => {
     const grants = access.body.data as { grantee: { username: string }; grantor: { username: string }; effective: boolean }[];
     const edges = grants.map((g) => `${g.grantor.username}>${g.grantee.username}`).sort();
     expect(edges).toEqual(
-      [`${owner.user.username}>${bob.user.username}`, `${bob.user.username}>${carol.user.username}`, `${bob.user.username}>${dave.user.username}`, `${owner.user.username}>${dave.user.username}`].sort(),
+      [
+        `${owner.user.username}>${bob.user.username}`,
+        `${bob.user.username}>${carol.user.username}`,
+        `${bob.user.username}>${dave.user.username}`,
+        `${owner.user.username}>${dave.user.username}`,
+      ].sort(),
     );
     expect(access.body.meta?.viewer_count).toBe(3);
     // A viewer only sees the grants they created.
@@ -156,7 +163,10 @@ test.describe.serial('real API — private sharing', () => {
     await expect(tree.getByText(`@${dave.user.username}`)).toHaveCount(2);
     await expect(owner.page.getByText('3 people have access.')).toBeVisible();
 
-    const bobRow = tree.getByRole('listitem').filter({ hasText: `@${bob.user.username}` }).first();
+    const bobRow = tree
+      .getByRole('listitem')
+      .filter({ hasText: `@${bob.user.username}` })
+      .first();
     await bobRow.getByRole('button', { name: 'Revoke' }).first().click();
     const dialog = owner.page.getByRole('alertdialog');
     await expect(dialog.getByText(`Revoke access for ${bob.user.name}?`)).toBeVisible();

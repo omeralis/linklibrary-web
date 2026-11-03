@@ -86,14 +86,14 @@ test.describe.serial('real API — link management', () => {
     await page.getByLabel('Title', { exact: true }).fill('Requests — HTTP for Humans');
     await page.getByLabel('Description').fill('My own description.');
     await page.getByRole('button', { name: 'Save changes' }).click();
-    await expect(page.getByText('Changes saved.')).toBeVisible();
+    await expect(page.getByText('Changes saved.').first()).toBeVisible();
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Requests — HTTP for Humans');
     let body = (await api.get(`/links/${extractedId}`)).body.data as { overrides: { title: string; description: string } };
     expect(body.overrides).toMatchObject({ title: 'Requests — HTTP for Humans', description: 'My own description.' });
 
     await page.getByRole('button', { name: 'Use original' }).first().click();
     await page.getByRole('button', { name: 'Save changes' }).click();
-    await expect(page.getByText('Changes saved.')).toBeVisible();
+    await expect(page.getByText('Changes saved.').first()).toBeVisible();
     body = (await api.get(`/links/${extractedId}`)).body.data as { overrides: { title: string; description: string } };
     expect(body.overrides.title).toBeNull();
   });
@@ -126,7 +126,10 @@ test.describe.serial('real API — link management', () => {
     // Only the trashed link may be listed under Trash (never the previous view's items as placeholder).
     await expect(page.getByRole('article')).toHaveCount(1);
     await expect(page.getByRole('article')).toContainText('does-not-exist-e2e.example.org');
-    await page.getByRole('article').getByRole('button', { name: /^Actions for/ }).click();
+    await page
+      .getByRole('article')
+      .getByRole('button', { name: /^Actions for/ })
+      .click();
     await page.getByRole('menuitem', { name: 'Restore' }).click();
     await expect(page.getByText('Link restored.')).toBeVisible();
     await expect(page.getByRole('article')).toHaveCount(0);
@@ -144,7 +147,10 @@ test.describe.serial('real API — link management', () => {
     const papi = await seededUser(ppage, pager);
     try {
       for (let i = 1; i <= 25; i++) {
-        await createLink(papi, `https://pagination-${i}.e2e-fixture.example.org/`, { custom_title: `Fixture ${String(i).padStart(2, '0')}`, tags: i % 2 ? ['odd'] : ['even'] });
+        await createLink(papi, `https://pagination-${i}.e2e-fixture.example.org/`, {
+          custom_title: `Fixture ${String(i).padStart(2, '0')}`,
+          tags: i % 2 ? ['odd'] : ['even'],
+        });
       }
       await ppage.goto('/en/dashboard/links');
       await expect(ppage.getByText('Page 1 of 2')).toBeVisible();

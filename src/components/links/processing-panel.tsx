@@ -57,9 +57,7 @@ export function ProcessingPanel({ link }: { link: OwnedLink }) {
           <Loader2 className="size-4 animate-spin text-primary" aria-hidden />
           {processing.extraction_error_code ? t('retryingTitle') : t('runningTitle')}
         </div>
-        <p className="mb-3 text-sm text-muted-foreground">
-          {processing.extraction_error_code ? t('retryingBody') : t('runningBody')}
-        </p>
+        <p className="mb-3 text-sm text-muted-foreground">{processing.extraction_error_code ? t('retryingBody') : t('runningBody')}</p>
         {processing.extraction_error_code && (
           <p className="-mt-2 mb-3 font-mono text-xs text-muted-foreground" title={t('technicalCode')}>
             {processing.extraction_error_code}
@@ -80,7 +78,9 @@ export function ProcessingPanel({ link }: { link: OwnedLink }) {
     <Alert variant="info" data-testid="ready-not-cleared">
       <ShieldQuestion aria-hidden />
       <AlertTitle>{t('readyNotClearedTitle')}</AlertTitle>
-      <AlertDescription>{t(`readyNotCleared.${securityStatus}`)}</AlertDescription>
+      <AlertDescription>
+        {t(`readyNotCleared.${securityStatus === 'UNKNOWN' && link.permissions.can_publish ? 'UNKNOWN_ALLOWED' : securityStatus}`)}
+      </AlertDescription>
     </Alert>
   ) : null;
 

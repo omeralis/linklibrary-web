@@ -85,7 +85,9 @@ export function LinkDetailView({ id }: { id: string }) {
               {link.site_name || link.hostname}
             </span>
           </div>
-          <h1 className="text-2xl font-semibold tracking-tight text-balance break-words"><bdi>{link.title}</bdi></h1>
+          <h1 className="text-2xl font-semibold tracking-tight text-balance break-words">
+            <bdi>{link.title}</bdi>
+          </h1>
           <div className="mt-3 flex flex-wrap items-center gap-1.5">
             <LinkStatusSummary processing={link.processing_status} security={link.security.status} visibility={link.visibility} />
           </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { ArrowLeft, Lock, Settings2, Share2, Users } from 'lucide-react';
+import { ArrowLeft, Lock, Settings2, Share2, ShieldAlert, Users } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -121,7 +121,15 @@ function LinkContent({ link }: { link: AnyLink }) {
               {link.site_name || link.hostname}
             </span>
           </div>
-          <h1 className="text-3xl leading-tight font-semibold tracking-tight text-balance break-words"><bdi>{link.title}</bdi></h1>
+          <h1 className="text-3xl leading-tight font-semibold tracking-tight text-balance break-words">
+            <bdi>{link.title}</bdi>
+          </h1>
+          {link.security.status === 'UNKNOWN' && (
+            <Alert variant="warning" className="mt-4" data-testid="unverified-notice">
+              <ShieldAlert aria-hidden />
+              <AlertDescription>{t('unverifiedNotice')}</AlertDescription>
+            </Alert>
+          )}
           <div className="mt-4 flex flex-wrap items-center gap-2">
             <OpenLinkButton link={link} variant="default" size="default" label={t('visit')} />
             <SecurityBadge status={link.security.status} />
@@ -133,7 +141,11 @@ function LinkContent({ link }: { link: AnyLink }) {
               <RemoteImage src={link.image_url} alt="" className="size-full" />
             </div>
           )}
-          {link.description && <p className="mt-6 text-lg leading-relaxed text-pretty"><bdi>{link.description}</bdi></p>}
+          {link.description && (
+            <p className="mt-6 text-lg leading-relaxed text-pretty">
+              <bdi>{link.description}</bdi>
+            </p>
+          )}
           {link.tags.length > 0 && (
             <ul className="mt-6 flex flex-wrap gap-2">
               {link.tags.map((tag) => (
@@ -200,8 +212,11 @@ function LinkContent({ link }: { link: AnyLink }) {
                 <CardDescription>{t('reshareBody')}</CardDescription>
               </CardHeader>
               <CardContent className="grid gap-4">
-                <InviteForm linkId={viewer.public_id} disabled={viewer.security.status !== 'CLEAR'} />
-                {viewer.security.status !== 'CLEAR' && <p className="text-xs text-muted-foreground">{t('reshareBlocked')}</p>}
+                <InviteForm
+                  linkId={viewer.public_id}
+                  disabled={viewer.security.can_share === false || viewer.security.status === 'SUSPICIOUS' || viewer.security.status === 'MALICIOUS'}
+                />
+                {viewer.security.can_share === false && <p className="text-xs text-muted-foreground">{t('reshareBlocked')}</p>}
                 <AccessGraph linkId={viewer.public_id} isOwner={false} />
               </CardContent>
             </Card>

@@ -32,7 +32,11 @@ export function PublicLinkCard({ link }: { link: PublicLink }) {
             <bdi>{link.title}</bdi>
           </Link>
         </h3>
-        {link.description && <p className="line-clamp-2 text-sm text-muted-foreground"><bdi>{link.description}</bdi></p>}
+        {link.description && (
+          <p className="line-clamp-2 text-sm text-muted-foreground">
+            <bdi>{link.description}</bdi>
+          </p>
+        )}
         <div className="mt-auto flex flex-wrap items-center gap-1.5 pt-1">
           {link.category && <Badge variant="outline">{categoryName(link.category, locale)}</Badge>}
           {link.tags.slice(0, 3).map((tag) => (

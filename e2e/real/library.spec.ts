@@ -35,10 +35,14 @@ test.describe.serial('real API — collections, search, public pages, admin', ()
     api = await seededUser(page, owner);
     links.en1 = (await createLink(api, `https://garden-${runId}.e2e-fixture.example.org/handbook`, { custom_title: T.en1, tags: ['garden'] })).public_id;
     links.en2 = (await createLink(api, `https://compost-${runId}.e2e-fixture.example.org/`, { custom_title: T.en2, tags: ['garden'] })).public_id;
-    links.ar = (await createLink(api, `https://arabic-${runId}.e2e-fixture.example.org/`, { custom_title: T.ar, custom_description: 'مقالة عن المكتبات' })).public_id;
+    links.ar = (
+      await createLink(api, `https://arabic-${runId}.e2e-fixture.example.org/`, { custom_title: T.ar, custom_description: 'مقالة عن المكتبات' })
+    ).public_id;
     links.priv = (await createLink(api, `https://diary-${runId}.e2e-fixture.example.org/`, { custom_title: T.priv })).public_id;
     for (const id of Object.values(links)) {
-      await expect.poll(async () => ((await api.get(`/links/${id}`)).body.data as { security: { status: string } }).security.status, { timeout: 30_000 }).not.toBe('PENDING');
+      await expect
+        .poll(async () => ((await api.get(`/links/${id}`)).body.data as { security: { status: string } }).security.status, { timeout: 30_000 })
+        .not.toBe('PENDING');
     }
     for (const id of [links.en1, links.en2, links.ar]) markClear(id);
   });
@@ -91,7 +95,12 @@ test.describe.serial('real API — collections, search, public pages, admin', ()
     expect((await api.get(`/links/${links.en2}`)).status).toBe(200);
 
     await page.goto('/en/dashboard/collections');
-    await expect(page.getByRole('article').filter({ hasText: `Garden ${runId}` }).getByText('2 links')).toBeVisible();
+    await expect(
+      page
+        .getByRole('article')
+        .filter({ hasText: `Garden ${runId}` })
+        .getByText('2 links'),
+    ).toBeVisible();
   });
 
   test('public collection shows only public links; private collection is 404 for everyone else', async ({ browser }) => {
@@ -156,10 +165,15 @@ test.describe.serial('real API — collections, search, public pages, admin', ()
     const anonCtx = await browser.newContext();
     const anonPage = await anonCtx.newPage();
     await expect
-      .poll(async () => {
-        const r = await anonCtx.request.get(`${API}/api/v1/public/search?q=${encodeURIComponent('gardening ' + runId)}`, { headers: { Accept: 'application/json' } });
-        return ((await r.json()).data as unknown[]).length;
-      }, { timeout: 45_000 })
+      .poll(
+        async () => {
+          const r = await anonCtx.request.get(`${API}/api/v1/public/search?q=${encodeURIComponent('gardening ' + runId)}`, {
+            headers: { Accept: 'application/json' },
+          });
+          return ((await r.json()).data as unknown[]).length;
+        },
+        { timeout: 45_000 },
+      )
       .toBe(1);
     await anonPage.goto(`/en/explore?q=${encodeURIComponent('gardening ' + runId)}`);
     await expect(anonPage.getByRole('link', { name: T.en1 })).toBeVisible();
@@ -210,7 +224,10 @@ test.describe.serial('real API — collections, search, public pages, admin', ()
     await page.goto(`/en/dashboard/collections/${collectionId}`);
     await page.getByRole('button', { name: 'More actions' }).click();
     await page.getByRole('menuitem', { name: 'Delete collection' }).click();
-    await page.getByRole('alertdialog').getByRole('button', { name: /Delete/ }).click();
+    await page
+      .getByRole('alertdialog')
+      .getByRole('button', { name: /Delete/ })
+      .click();
     await expect(page.getByText('Collection deleted.')).toBeVisible();
     expect((await api.get(`/collections/${collectionId}`)).status).toBe(404);
     expect((await api.get(`/links/${links.en1}`)).status).toBe(200);

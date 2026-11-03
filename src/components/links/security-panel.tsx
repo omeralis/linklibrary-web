@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Check, Info, RefreshCw, X } from 'lucide-react';
+import { Check, Clock, Info, RefreshCw, ShieldAlert, X } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -49,6 +49,7 @@ export function SecurityPanel({ link }: { link: OwnedLink }) {
   if (details.isError) return <ErrorState error={details.error} onRetry={() => details.refetch()} />;
 
   const d = details.data;
+  const comingSoon = d.scanning === 'COMING_SOON';
   const pendingAppeal = d.appeals.some((a) => a.status === 'PENDING');
   const canAppeal = (d.stored_status === 'SUSPICIOUS' || d.stored_status === 'MALICIOUS') && !pendingAppeal;
 
@@ -99,9 +100,24 @@ export function SecurityPanel({ link }: { link: OwnedLink }) {
               <Info aria-hidden />
               <AlertDescription>{d.disclaimer}</AlertDescription>
             </Alert>
-            <div className="flex flex-wrap gap-2">
+            {comingSoon && (
+              <Alert variant="info" data-testid="scanning-coming-soon">
+                <Clock aria-hidden />
+                <AlertTitle>{tsec('comingSoon.title')}</AlertTitle>
+                <AlertDescription>{tsec('comingSoon.body')}</AlertDescription>
+              </Alert>
+            )}
+            {d.unverified_sharing && (
+              <Alert variant="warning" data-testid="unverified-warning">
+                <ShieldAlert aria-hidden />
+                <AlertDescription>{tsec('unverifiedWarning')}</AlertDescription>
+              </Alert>
+            )}
+            <div className="flex flex-wrap items-center gap-2">
               <Button
                 variant="outline"
+                disabled={comingSoon}
+                aria-disabled={comingSoon}
                 loading={rescan.isPending}
                 onClick={() =>
                   rescan.mutate(undefined, { onSuccess: (r) => toast.success(r.message ?? t('rescanQueued')), onError: (e) => toast.error(errorMessage(e)) })
@@ -109,6 +125,7 @@ export function SecurityPanel({ link }: { link: OwnedLink }) {
               >
                 <RefreshCw aria-hidden /> {t('rescan')}
               </Button>
+              {comingSoon && <Badge variant="muted">{tsec('comingSoon.badge')}</Badge>}
             </div>
           </CardContent>
         </Card>

@@ -25,7 +25,10 @@ export interface TestUser {
 }
 
 export function newUser(label: string): TestUser {
-  const slug = `${label}_${runId}`.toLowerCase().replace(/[^a-z0-9_]/g, '').slice(0, 30);
+  const slug = `${label}_${runId}`
+    .toLowerCase()
+    .replace(/[^a-z0-9_]/g, '')
+    .slice(0, 30);
   return { name: `E2E ${label}`, username: slug, email: `${slug}@e2e.example.com`, password: PASSWORD };
 }
 

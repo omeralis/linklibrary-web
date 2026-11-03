@@ -1,5 +1,5 @@
 import { test, expect, type BrowserContext, type Page } from '@playwright/test';
-import { Api, createLink, deleteAccount, markClear, newUser, runId, seededUser } from './support';
+import { API, Api, createLink, deleteAccount, markClear, newUser, runId, seededUser } from './support';
 
 /**
  * Security statuses against the real API. Verdicts come from the backend's heuristic provider
@@ -40,7 +40,16 @@ async function settledSecurity(api: Api, id: string) {
   return status;
 }
 
-test.describe.serial('real API — security statuses', () => {
+test.describe.serial('real API — security statuses (strict policy)', () => {
+  // The temporary unverified-sharing policy (policy.spec.ts) replaces these expectations for UNKNOWN links.
+  test.beforeAll(async () => {
+    const features = await (await fetch(`${API}/api/v1/public/features`)).json();
+    test.skip(
+      features.data.unverified_sharing === true || features.data.security_scanning === 'COMING_SOON',
+      'temporary policy is active (see policy.spec.ts)',
+    );
+  });
+
   let ctx: BrowserContext;
   let page: Page;
   let api: Api;
@@ -52,6 +61,7 @@ test.describe.serial('real API — security statuses', () => {
     api = await seededUser(page, owner);
   });
   test.afterAll(async () => {
+    if (!ctx) return; // skipped (temporary policy active)
     await deleteAccount(ctx, owner);
     await ctx.close();
   });
@@ -150,7 +160,9 @@ test.describe.serial('real API — security statuses', () => {
     expect(((await api.get(`/links/${ids.clear}`)).body.data as LinkBody).visibility).toBe('PUBLIC');
     // The public page is reachable anonymously.
     const anon = await page.context().browser()!.newContext();
-    const res = await anon.request.get(`${process.env.E2E_API_URL ?? 'http://localhost:8000'}/api/v1/public/links/${ids.clear}`, { headers: { Accept: 'application/json' } });
+    const res = await anon.request.get(`${process.env.E2E_API_URL ?? 'http://localhost:8000'}/api/v1/public/links/${ids.clear}`, {
+      headers: { Accept: 'application/json' },
+    });
     expect(res.status()).toBe(200);
     await anon.close();
     await page.getByRole('tab', { name: 'Security' }).click();

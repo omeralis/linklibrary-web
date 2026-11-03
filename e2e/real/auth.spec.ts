@@ -13,7 +13,10 @@ test.describe.serial('real API — authentication & session', () => {
   test('CSRF cookie is issued for the SPA origin and mutations without it are rejected', async ({ request }) => {
     const csrf = await request.get(`${API}/sanctum/csrf-cookie`, { headers: { Origin: FRONTEND, Referer: `${FRONTEND}/` } });
     expect(csrf.status()).toBe(204);
-    const setCookie = csrf.headersArray().filter((h) => h.name.toLowerCase() === 'set-cookie').map((h) => h.value);
+    const setCookie = csrf
+      .headersArray()
+      .filter((h) => h.name.toLowerCase() === 'set-cookie')
+      .map((h) => h.value);
     expect(setCookie.some((c) => c.startsWith('XSRF-TOKEN=') && !/httponly/i.test(c))).toBe(true);
     expect(setCookie.some((c) => /httponly/i.test(c) && /samesite=lax/i.test(c))).toBe(true);
     expect(csrf.headers()['access-control-allow-origin']).toBe(FRONTEND);

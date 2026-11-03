@@ -13,13 +13,32 @@ test('dashboard pages fit phone and tablet widths in ar and en', async ({ page }
   test.setTimeout(300_000);
   const api = await seededUser(page, user);
   try {
-    const id = (await createLink(api, `https://responsive-${runId}.e2e-fixture.example.org/a/very/long/path/that/should/never/overflow/the/viewport?with=query&and=more`, {
-      custom_title: `A deliberately long title to check wrapping on small screens ${runId} — ${'word '.repeat(12)}`,
-      tags: ['mobile', 'layout', 'rtl'],
-    })).public_id;
-    await expect.poll(async () => ((await api.get(`/links/${id}`)).body.data as { security: { status: string } }).security.status, { timeout: 30_000 }).not.toBe('PENDING');
+    const id = (
+      await createLink(
+        api,
+        `https://responsive-${runId}.e2e-fixture.example.org/a/very/long/path/that/should/never/overflow/the/viewport?with=query&and=more`,
+        {
+          custom_title: `A deliberately long title to check wrapping on small screens ${runId} — ${'word '.repeat(12)}`,
+          tags: ['mobile', 'layout', 'rtl'],
+        },
+      )
+    ).public_id;
+    await expect
+      .poll(async () => ((await api.get(`/links/${id}`)).body.data as { security: { status: string } }).security.status, { timeout: 30_000 })
+      .not.toBe('PENDING');
     markClear(id);
-    const paths = ['/dashboard', '/dashboard/links', `/dashboard/links/${id}`, `/dashboard/links/${id}?tab=security`, `/dashboard/links/${id}?tab=sharing`, '/dashboard/collections', '/dashboard/search?q=layout', '/dashboard/notifications', '/dashboard/settings', `/l/${id}`];
+    const paths = [
+      '/dashboard',
+      '/dashboard/links',
+      `/dashboard/links/${id}`,
+      `/dashboard/links/${id}?tab=security`,
+      `/dashboard/links/${id}?tab=sharing`,
+      '/dashboard/collections',
+      '/dashboard/search?q=layout',
+      '/dashboard/notifications',
+      '/dashboard/settings',
+      `/l/${id}`,
+    ];
     const pace = pacer();
     for (const size of [null, { width: 820, height: 1180 }]) {
       if (size) await page.setViewportSize(size);
