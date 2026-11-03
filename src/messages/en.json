@@ -500,7 +500,8 @@
       "disabled": "AI enrichment is turned off on this server. Everything else works normally.",
       "pending": "AI suggestions will appear here once processing finishes.",
       "failed": "AI enrichment wasn't available for this link. You can try fetching again later.",
-      "skipped": "AI enrichment was skipped for this link (not enough readable content)."
+      "skipped": "AI enrichment was skipped for this link (not enough readable content).",
+      "quotaWait": "AI suggestions are paused because today's free AI quota has been used. They will resume automatically around {time}. Your link works normally in the meantime."
     },
     "detail": {
       "back": "Back to library",
@@ -1272,9 +1273,7 @@
       },
       {
         "heading": "Contact",
-        "body": [
-          "Questions about privacy can be sent through the contact page."
-        ]
+        "body": ["Questions about privacy can be sent through the contact page."]
       }
     ]
   },
@@ -1284,9 +1283,7 @@
     "sections": [
       {
         "heading": "Your account",
-        "body": [
-          "Keep your password secure and your e-mail address up to date. You are responsible for activity on your account."
-        ]
+        "body": ["Keep your password secure and your e-mail address up to date. You are responsible for activity on your account."]
       },
       {
         "heading": "Your content",
@@ -1303,21 +1300,15 @@
       },
       {
         "heading": "Security checks",
-        "body": [
-          "Security checks reduce risk but cannot guarantee that a website is safe. Use your own judgement before visiting any destination."
-        ]
+        "body": ["Security checks reduce risk but cannot guarantee that a website is safe. Use your own judgement before visiting any destination."]
       },
       {
         "heading": "Availability",
-        "body": [
-          "Features such as AI suggestions depend on server configuration and third-party providers and may be unavailable at times."
-        ]
+        "body": ["Features such as AI suggestions depend on server configuration and third-party providers and may be unavailable at times."]
       },
       {
         "heading": "Changes",
-        "body": [
-          "These terms may change as the product evolves. Significant changes will be communicated through the service."
-        ]
+        "body": ["These terms may change as the product evolves. Significant changes will be communicated through the service."]
       }
     ]
   }

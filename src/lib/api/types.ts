@@ -161,6 +161,8 @@ export interface Processing {
   extraction_error_code: string | null;
   ai: string;
   ai_enabled: boolean;
+  /** Set while the free AI quota is exhausted; suggestions resume automatically at `retry_at`. */
+  ai_wait?: { code: string; retry_at: string } | null;
 }
 
 export interface LinkPermissions {

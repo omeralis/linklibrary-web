@@ -25,6 +25,8 @@ export function AiPanel({ link }: { link: PublicLink | OwnedLink }) {
   if (!link.ai) {
     if (!owned) return null;
     const state = owned.processing.ai_enabled ? owned.processing.ai : 'DISABLED';
+    const wait = owned.processing.ai_enabled && state === 'PENDING' ? owned.processing.ai_wait : null;
+    const retryAt = wait ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(wait.retry_at)) : null;
     return (
       <Card className="gap-2 py-4">
         <CardHeader className="px-4">
@@ -32,7 +34,15 @@ export function AiPanel({ link }: { link: PublicLink | OwnedLink }) {
             <Sparkles className="size-4 text-primary" aria-hidden /> {t('title')}
           </CardTitle>
           <CardDescription>
-            {state === 'DISABLED' ? t('disabled') : state === 'FAILED' ? t('failed') : state === 'SKIPPED' ? t('skipped') : t('pending')}
+            {wait && retryAt
+              ? t('quotaWait', { time: retryAt })
+              : state === 'DISABLED'
+                ? t('disabled')
+                : state === 'FAILED'
+                  ? t('failed')
+                  : state === 'SKIPPED'
+                    ? t('skipped')
+                    : t('pending')}
           </CardDescription>
         </CardHeader>
       </Card>

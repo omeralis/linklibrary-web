@@ -3781,6 +3781,12 @@ export type components = {
       extraction_error_code?: string | null;
       ai?: string;
       ai_enabled?: boolean;
+      /** @description Set while the free AI quota is exhausted; AI suggestions resume automatically at retry_at. */
+      ai_wait?: {
+        code?: string;
+        /** Format: date-time */
+        retry_at?: string;
+      } | null;
     };
     PublicSavedLink: {
       /** Format: uuid */
