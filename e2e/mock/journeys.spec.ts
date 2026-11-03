@@ -113,7 +113,7 @@ test.describe.serial('core user journeys', () => {
     await page.getByRole('tab', { name: 'Sharing' }).click();
     await expect(page.getByRole('switch', { name: 'Make this link public' })).toBeDisabled();
     await expect(page.getByPlaceholder('name@example.com')).toBeDisabled();
-    await expect(page.getByText(/couldn't be verified by a security provider/).first()).toBeVisible();
+    await expect(page.getByTestId('sharing-restriction')).toHaveText("This link can't be published or shared yet: its page details are still being processed or couldn't be read, or sharing of unverified links is turned off.");
   });
 
   test('8. accept an invitation as the recipient', async () => {

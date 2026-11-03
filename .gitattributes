@@ -1,3 +1,7 @@
 * text=auto eol=lf
 *.png binary
 *.ico binary
+
+# Deployment helpers execute on Linux; preserve exact reviewed bytes.
+deploy/** text eol=lf
+.github/workflows/*.yml text eol=lf
