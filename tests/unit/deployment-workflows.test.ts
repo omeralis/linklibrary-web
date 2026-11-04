@@ -13,10 +13,13 @@ const load = require('js-yaml').load as (text: string) => Workflow;
 const workflow = (name: string) => load(readFileSync(resolve('.github/workflows', name), 'utf8'));
 
 describe('production deployment security contracts', () => {
-  it('requires manual authorization, exact SHA validation, and production environment', () => {
+  it('deploys only from main behind the DEPLOY_ENABLED switch, with exact SHA validation and the production environment', () => {
     const deploy = workflow('deploy.yml');
-    expect(Object.keys(deploy.on)).toEqual(['workflow_dispatch']);
+    expect(Object.keys(deploy.on).sort()).toEqual(['push', 'workflow_dispatch']);
+    expect((deploy.on.push as { branches: string[] }).branches).toEqual(['main']);
     expect(deploy.permissions).toEqual({ contents: 'read' });
+    expect(deploy.jobs.authorize.if).toContain("github.ref == 'refs/heads/main'");
+    expect(deploy.jobs.authorize.if).toContain("github.event_name == 'push'");
     expect(deploy.jobs.authorize.if).toContain('inputs.authorization');
     expect(deploy.jobs.authorize.if).toContain('DEPLOY_ENABLED');
     expect(deploy.jobs.build.environment).toBeUndefined();
