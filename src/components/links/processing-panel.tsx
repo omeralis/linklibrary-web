@@ -1,6 +1,6 @@
 'use client';
 
-import { AlertTriangle, Ban, Loader2, RefreshCw, ShieldQuestion } from 'lucide-react';
+import { AlertTriangle, Ban, Loader2, PencilLine, RefreshCw, ShieldQuestion } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -28,7 +28,7 @@ function Stage({ label, value }: { label: string; value: string }) {
  * Live processing state (security scan → metadata extraction → optional AI). Polls while running,
  * explains failures and offers re-analysis (POST /links/{id}/reanalyze, 20/hour).
  */
-export function ProcessingPanel({ link }: { link: OwnedLink }) {
+export function ProcessingPanel({ link, onEditDetails }: { link: OwnedLink; onEditDetails?: () => void }) {
   const t = useTranslations('links.processing');
   const errorMessage = useErrorMessage();
   const poll = useProcessingPoll(link);
@@ -121,6 +121,11 @@ export function ProcessingPanel({ link }: { link: OwnedLink }) {
         <AlertTitle>{t('blockedTitle')}</AlertTitle>
         <AlertDescription>
           <p>{link.security.status === 'SUSPICIOUS' || link.security.status === 'MALICIOUS' ? t('blockedSecurity') : t('blockedSource')}</p>
+          {onEditDetails && link.security.status !== 'SUSPICIOUS' && link.security.status !== 'MALICIOUS' && (
+            <Button size="sm" variant="outline" className="mt-2" onClick={onEditDetails}>
+              <PencilLine aria-hidden /> {t('addDetailsManually')}
+            </Button>
+          )}
         </AlertDescription>
       </Alert>
     );
