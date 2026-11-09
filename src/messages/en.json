@@ -353,6 +353,16 @@
       "limit": "Up to {max} tags",
       "remove": "Remove tag {tag}"
     },
+    "share": {
+      "metaTitle": "Share a link",
+      "title": "Shared link ready to save",
+      "body": "Complete the details in the dialog, then save. Nothing is saved until you confirm.",
+      "reopen": "Open the save dialog",
+      "noUrlTitle": "We couldn't find a link in what you shared",
+      "noUrlBody": "Share an address that starts with http or https, or add it manually.",
+      "addManually": "Add a link manually",
+      "toLibrary": "Go to my library"
+    },
     "add": {
       "title": "Save a link",
       "description": "Paste any web address. We'll check it, fetch its details and keep it private.",

@@ -26,6 +26,7 @@ export async function generateMetadata({ params }: LayoutProps<'/[locale]'>): Pr
     title: { default: `${BRAND_NAME} — ${t('tagline')}`, template: `%s · ${BRAND_NAME}` },
     description: t('description'),
     applicationName: BRAND_NAME,
+    icons: { apple: '/icons/apple-touch-icon.png' },
     alternates: {
       canonical: `/${locale}`,
       languages: { ar: '/ar', en: '/en', 'x-default': '/ar' },

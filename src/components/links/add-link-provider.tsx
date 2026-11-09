@@ -25,7 +25,7 @@ import { CategorySelect } from './category-select';
 import { TagInput } from './tag-input';
 
 interface AddLinkContextValue {
-  open: (options?: { url?: string; collection?: string }) => void;
+  open: (options?: { url?: string; collection?: string; title?: string }) => void;
 }
 
 const AddLinkContext = React.createContext<AddLinkContextValue>({ open: () => undefined });
@@ -35,12 +35,12 @@ export function useAddLink() {
 }
 
 export function AddLinkProvider({ children }: { children: React.ReactNode }) {
-  const [state, setState] = React.useState<{ open: boolean; url?: string; collection?: string }>({ open: false });
+  const [state, setState] = React.useState<{ open: boolean; url?: string; collection?: string; title?: string }>({ open: false });
   const value = React.useMemo<AddLinkContextValue>(() => ({ open: (options) => setState({ open: true, ...options }) }), []);
   return (
     <AddLinkContext.Provider value={value}>
       {children}
-      <AddLinkDialog open={state.open} initialUrl={state.url} initialCollection={state.collection} onOpenChange={(open) => setState((s) => ({ ...s, open }))} />
+      <AddLinkDialog open={state.open} initialUrl={state.url} initialCollection={state.collection} initialTitle={state.title} onOpenChange={(open) => setState((s) => ({ ...s, open }))} />
     </AddLinkContext.Provider>
   );
 }
@@ -52,34 +52,46 @@ function AddLinkDialog({
   onOpenChange,
   initialUrl,
   initialCollection,
+  initialTitle,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   initialUrl?: string;
   initialCollection?: string;
+  initialTitle?: string;
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg">
-        {open && <AddLinkForm onClose={() => onOpenChange(false)} initialUrl={initialUrl} initialCollection={initialCollection} />}
+        {open && <AddLinkForm onClose={() => onOpenChange(false)} initialUrl={initialUrl} initialCollection={initialCollection} initialTitle={initialTitle} />}
       </DialogContent>
     </Dialog>
   );
 }
 
 /** Mounted only while open: every opening starts with a fresh form. */
-function AddLinkForm({ onClose, initialUrl, initialCollection }: { onClose: () => void; initialUrl?: string; initialCollection?: string }) {
+function AddLinkForm({
+  onClose,
+  initialUrl,
+  initialCollection,
+  initialTitle,
+}: {
+  onClose: () => void;
+  initialUrl?: string;
+  initialCollection?: string;
+  initialTitle?: string;
+}) {
   const t = useTranslations('links.add');
   const tf = useTranslations('links.fields');
   const tc = useTranslations('common');
   const router = useRouter();
   const queryClient = useQueryClient();
   const errorMessage = useErrorMessage();
-  const [moreOpen, setMoreOpen] = React.useState(!!initialCollection);
+  const [moreOpen, setMoreOpen] = React.useState(!!initialCollection || !!initialTitle);
   const collections = useCollections(moreOpen);
   const form = useForm<AddLinkInput, unknown, AddLinkValues>({
     resolver: zodResolver(addLinkSchema),
-    defaultValues: { url: initialUrl ?? '', custom_title: '', notes: '', category: '', tags: [], collections: initialCollection ? [initialCollection] : [] },
+    defaultValues: { url: initialUrl ?? '', custom_title: initialTitle ?? '', notes: '', category: '', tags: [], collections: initialCollection ? [initialCollection] : [] },
   });
 
   async function onSubmit(values: AddLinkValues) {
