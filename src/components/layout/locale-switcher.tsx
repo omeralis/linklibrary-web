@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Languages } from 'lucide-react';
+import { Globe } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useQueryClient } from '@tanstack/react-query';
 import { usePathname, useRouter } from '@/i18n/navigation';
@@ -46,11 +46,11 @@ export function LocaleSwitcher({ variant = 'icon' }: { variant?: 'icon' | 'full'
       <DropdownMenuTrigger asChild>
         {variant === 'icon' ? (
           <Button variant="ghost" size="icon" aria-label={t('language')}>
-            <Languages aria-hidden />
+            <Globe aria-hidden />
           </Button>
         ) : (
           <Button variant="outline" size="sm">
-            <Languages aria-hidden />
+            <Globe aria-hidden />
             {LABELS[locale]}
           </Button>
         )}
