@@ -138,7 +138,7 @@ export function LinkDetailView({ id }: { id: string }) {
       )}
 
       <div className="mb-6">
-        <ProcessingPanel link={link} />
+        <ProcessingPanel link={link} onEditDetails={() => setTab('edit')} />
       </div>
 
       <Tabs value={tab} onValueChange={setTab}>

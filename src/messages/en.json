@@ -353,6 +353,16 @@
       "limit": "Up to {max} tags",
       "remove": "Remove tag {tag}"
     },
+    "share": {
+      "metaTitle": "Share a link",
+      "title": "Shared link ready to save",
+      "body": "Complete the details in the dialog, then save. Nothing is saved until you confirm.",
+      "reopen": "Open the save dialog",
+      "noUrlTitle": "We couldn't find a link in what you shared",
+      "noUrlBody": "Share an address that starts with http or https, or add it manually.",
+      "addManually": "Add a link manually",
+      "toLibrary": "Go to my library"
+    },
     "add": {
       "title": "Save a link",
       "description": "Paste any web address. We'll check it, fetch its details and keep it private.",
@@ -476,7 +486,8 @@
       "partialBody": "Fill in anything missing from the Edit tab, or try fetching again.",
       "blockedTitle": "Processing stopped",
       "blockedSecurity": "The security check flagged this destination, so its content wasn't fetched.",
-      "blockedSource": "The site doesn't allow automated access (robots rules, paywall or similar). Manual details still work.",
+      "blockedSource": "This site doesn't allow its page details to be fetched automatically (for example Facebook or Instagram). This is not a security verdict. The link is saved and you can open and share it; add the title and description yourself.",
+      "addDetailsManually": "Add details manually",
       "reanalyze": "Fetch again",
       "reanalyzeQueued": "Re-analysis queued.",
       "retryingTitle": "Still trying to reach this page…",
