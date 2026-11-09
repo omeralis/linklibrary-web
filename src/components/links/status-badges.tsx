@@ -1,6 +1,6 @@
 'use client';
 
-import { CircleDashed, Globe2, Loader2, Lock, ShieldAlert, ShieldCheck, ShieldQuestion, ShieldX, AlertCircle, CheckCircle2, Ban } from 'lucide-react';
+import { CircleDashed, Globe2, Loader2, Lock, ShieldAlert, ShieldCheck, ShieldQuestion, ShieldX, AlertCircle, CheckCircle2, PencilLine } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -58,14 +58,14 @@ const PROCESSING_ICON = {
   COMPLETED: CheckCircle2,
   PARTIAL: AlertCircle,
   FAILED: AlertCircle,
-  BLOCKED: Ban,
+  BLOCKED: PencilLine,
 } as const;
 
 export function ProcessingBadge({ status, hideWhenDone = true }: { status: ProcessingStatus; hideWhenDone?: boolean }) {
   const t = useTranslations('links.processing');
   if (hideWhenDone && status === 'COMPLETED') return null;
   const Icon = PROCESSING_ICON[status];
-  const variant = status === 'FAILED' || status === 'BLOCKED' ? 'danger' : status === 'PARTIAL' ? 'warning' : status === 'COMPLETED' ? 'success' : 'info';
+  const variant = status === 'FAILED' ? 'danger' : status === 'PARTIAL' ? 'warning' : status === 'COMPLETED' ? 'success' : status === 'BLOCKED' ? 'muted' : 'info';
   return (
     <Badge variant={variant} role="status">
       <Icon className={status === 'PENDING' || status === 'PROCESSING' ? 'animate-spin' : undefined} aria-hidden />

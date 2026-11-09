@@ -457,7 +457,7 @@
         "COMPLETED": "Ready",
         "PARTIAL": "Partial details",
         "FAILED": "Details unavailable",
-        "BLOCKED": "Blocked"
+        "BLOCKED": "Manual details"
       },
       "stage": {
         "PENDING": "Waiting",
@@ -465,7 +465,7 @@
         "COMPLETED": "Done",
         "PARTIAL": "Partial",
         "FAILED": "Failed",
-        "BLOCKED": "Blocked",
+        "BLOCKED": "Not fetchable",
         "SKIPPED": "Skipped",
         "DISABLED": "Off",
         "CLEAR": "No threats found",
@@ -487,6 +487,9 @@
       "blockedTitle": "Processing stopped",
       "blockedSecurity": "The security check flagged this destination, so its content wasn't fetched.",
       "blockedSource": "This site doesn't allow its page details to be fetched automatically (for example Facebook or Instagram). This is not a security verdict. The link is saved and you can open and share it; add the title and description yourself.",
+      "blockedSourceTitle": "This site doesn't allow details to be fetched automatically",
+      "manualDetailsTitle": "Details added manually",
+      "manualDetailsBody": "This site doesn't allow its details to be fetched automatically, so we use what you entered. The link is saved and you can open and share it. The security check is separate.",
       "addDetailsManually": "Add details manually",
       "reanalyze": "Fetch again",
       "reanalyzeQueued": "Re-analysis queued.",

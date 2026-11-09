@@ -115,17 +115,31 @@ export function ProcessingPanel({ link, onEditDetails }: { link: OwnedLink; onEd
   }
 
   if (status === 'BLOCKED') {
+    const securityBlocked = link.security.status === 'SUSPICIOUS' || link.security.status === 'MALICIOUS';
+    if (!securityBlocked) {
+      // The site refuses automated fetching: not an error and not a security verdict. The link is fully usable.
+      const hasManualDetails = Boolean(link.overrides.title || link.overrides.description);
+      return (
+        <Alert variant="info">
+          <PencilLine aria-hidden />
+          <AlertTitle>{hasManualDetails ? t('manualDetailsTitle') : t('blockedSourceTitle')}</AlertTitle>
+          <AlertDescription>
+            <p>{hasManualDetails ? t('manualDetailsBody') : t('blockedSource')}</p>
+            {!hasManualDetails && onEditDetails && (
+              <Button size="sm" variant="outline" className="mt-2" onClick={onEditDetails}>
+                <PencilLine aria-hidden /> {t('addDetailsManually')}
+              </Button>
+            )}
+          </AlertDescription>
+        </Alert>
+      );
+    }
     return (
       <Alert variant="destructive">
         <Ban aria-hidden />
         <AlertTitle>{t('blockedTitle')}</AlertTitle>
         <AlertDescription>
-          <p>{link.security.status === 'SUSPICIOUS' || link.security.status === 'MALICIOUS' ? t('blockedSecurity') : t('blockedSource')}</p>
-          {onEditDetails && link.security.status !== 'SUSPICIOUS' && link.security.status !== 'MALICIOUS' && (
-            <Button size="sm" variant="outline" className="mt-2" onClick={onEditDetails}>
-              <PencilLine aria-hidden /> {t('addDetailsManually')}
-            </Button>
-          )}
+          <p>{t('blockedSecurity')}</p>
         </AlertDescription>
       </Alert>
     );
